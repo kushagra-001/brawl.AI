@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl.AI - Turbo Battle Arena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #ff1a1a; --red-dim: rgba(255,26,26,0.15);
+            --purple: #a855f7; --purple-dim: rgba(168,85,247,0.15);
+            --green: #00ff73; --cyan: #00c8ff;
+            --dark: #06030e; --card: rgba(15,8,30,0.85);
+            --muted: #6a4a7c;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: var(--dark);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ── CINEMATIC BACKGROUND ── */
+        .arena-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: url('battle_bg.png') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.35) saturate(1.4);
+        }
+        /* Neon ambiance overlays */
+        .arena-bg::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: 
+                radial-gradient(ellipse 60% 40% at 50% 100%, rgba(168,85,247,0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 20% 50%, rgba(255,26,26,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 80% 50%, rgba(168,85,247,0.2) 0%, transparent 60%);
+        }
+        /* CRT scanlines */
+        .arena-bg::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.1) 1px, rgba(0,0,0,0.1) 2px),
+                linear-gradient(0deg, rgba(6,3,14,0) 60%, rgba(6,3,14,0.8) 100%);
+            pointer-events: none;
+        }
+
+        /* ── NEON PARTICLES ── */
+        .particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+        .particle {
+            position: absolute; border-radius: 50%; pointer-events: none;
+            animation: floatUp 12s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* ── NAV ── */
+        .arena-nav {
+            position: relative; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 40px;
+            background: rgba(6,3,14,0.8);
+            border-bottom: 1px solid rgba(168,85,247,0.3);
+            backdrop-filter: blur(10px);
+        }
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 900;
+            color: #fff; letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(168,85,247,0.8), 0 0 40px rgba(255,26,26,0.4);
+        }
+        #retreat-btn {
+            background: rgba(255,26,26,0.1); border: 2px solid var(--red);
+            color: var(--red); padding: 10px 24px; border-radius: 8px;
+            font-family: 'Orbitron', sans-serif; font-size: 0.78rem; font-weight: 700;
+            cursor: pointer; letter-spacing: 2px; transition: all 0.3s;
+        }
+        #retreat-btn:hover { background: var(--red); color: #000; box-shadow: 0 0 20px rgba(255,26,26,0.6); }
+
+        /* ── MAIN NEON SIGN TITLE ── */
+        .arena-title-block {
+            position: relative; z-index: 10;
+            text-align: center; padding: 30px 20px 10px;
+        }
+        .neon-sign {
+            display: inline-block;
+            background: rgba(6,3,14,0.85);
+            border: 2px solid var(--red);
+            border-radius: 12px;
+            padding: 24px 70px;
+            box-shadow: 0 0 40px var(--red), 0 0 100px rgba(255,26,26,0.3), inset 0 0 40px rgba(255,26,26,0.15);
+            animation: signFlicker 6s ease-in-out infinite;
+            position: relative;
+        }
+        .neon-sign::before {
+            content:''; position:absolute; inset:-4px; border:1px solid rgba(255,26,26,0.5); border-radius:14px; pointer-events:none;
+        }
+        .neon-sign h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.2rem; font-weight: 900; letter-spacing: 8px;
+            color: var(--red); line-height: 1;
+            text-shadow: 0 0 15px var(--red), 0 0 45px var(--red), 0 0 80px rgba(255,26,26,0.6);
+            transform: skewX(-5deg);
+        }
+        @keyframes signFlicker {
+            0%, 94%, 96%, 100% { 
+                box-shadow: 0 0 40px var(--red), 0 0 100px rgba(255,26,26,0.3), inset 0 0 40px rgba(255,26,26,0.15); 
+                opacity: 1;
+            }
+            95%, 97% { 
+                box-shadow: 0 0 10px var(--red), 0 0 20px rgba(255,26,26,0.1); 
+                opacity: 0.85;
+            }
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .battle-container {
+            position: relative; z-index: 10;
+            max-width: 1200px; margin: 0 auto;
+            padding: 20px 30px 60px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        /* ── HP BARS HEADER ── */
+        .battle-header {
+            display: grid; grid-template-columns: 1fr 100px 1fr;
+            align-items: center; gap: 30px;
+            background: rgba(15,8,30,0.92);
+            border: 1px solid rgba(168,85,247,0.35);
+            border-radius: 20px; padding: 24px 32px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(168,85,247,0.1);
+        }
+        .combatant { display: flex; flex-direction: column; gap: 10px; }
+        .combatant-top { display: flex; align-items: center; gap: 14px; }
+        .fighter-avatar {
+            width: 56px; height: 56px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; flex-shrink: 0;
+            border: 2px solid;
+        }
+        .player-avatar { background: rgba(0,255,115,0.1); border-color: var(--green); box-shadow: 0 0 15px rgba(0,255,115,0.3); }
+        .ai-avatar { background: rgba(255,26,26,0.1); border-color: var(--red); box-shadow: 0 0 15px rgba(255,26,26,0.3); }
+        .fighter-details h3 { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; }
+        .fighter-details span { font-size: 0.72rem; color: var(--muted); }
+        .hp-row { display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 5px; }
+        .hp-track { height: 10px; background: rgba(255,255,255,0.07); border-radius: 5px; overflow: hidden; }
+        .hp-bar { height: 100%; border-radius: 5px; transition: width 0.6s ease; }
+        #player-hp-bar { background: linear-gradient(90deg, var(--green), #00e066); box-shadow: 0 0 8px var(--green); }
+        #ai-hp-bar { background: linear-gradient(90deg, var(--red), #ff5500); box-shadow: 0 0 8px var(--red); }
+        .ai-side .fighter-avatar { border-color: rgba(255,26,26,0.5); }
+        .ai-side .hp-track .hp-bar { float: right; }
+
+        /* VS Badge */
+        .vs-badge {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(168,85,247,0.3), rgba(255,26,26,0.2));
+            border: 2px solid rgba(168,85,247,0.5);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 900;
+            box-shadow: 0 0 20px rgba(168,85,247,0.4);
+            animation: vsPulse 2s ease-in-out infinite;
+            justify-self: center;
+        }
+        @keyframes vsPulse {
+            0%,100% { box-shadow: 0 0 20px rgba(168,85,247,0.4); }
+            50% { box-shadow: 0 0 40px rgba(168,85,247,0.8), 0 0 10px rgba(255,26,26,0.4); }
+        }
+
+        /* ── TERMINAL SECTION ── */
+        .terminal-section {
+            background: var(--card); border-radius: 16px;
+            border: 1px solid rgba(168,85,247,0.25);
+            overflow: hidden; backdrop-filter: blur(12px);
+        }
+        .terminal-header {
+            background: rgba(168,85,247,0.1);
+            border-bottom: 1px solid rgba(168,85,247,0.25);
+            padding: 14px 20px;
+            display: flex; align-items: center; gap: 14px;
+        }
+        .circles { display: flex; gap: 7px; }
+        .circle { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+        .circle.red { background: #ff5f57; }
+        .circle.yellow { background: #ffbd2e; }
+        .circle.green { background: #28c840; }
+        .terminal-title {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: rgba(255,255,255,0.6);
+        }
+        .terminal-body { padding: 24px; }
+
+        /* Loading */
+        #loading-overlay { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 60px; }
+        .spin-ring {
+            width: 60px; height: 60px; border-radius: 50%;
+            border: 3px solid rgba(168,85,247,0.2);
+            border-top-color: var(--purple);
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--purple); }
+
+        /* Challenge Prompt */
+        #challenge-content { display: none; }
+        .challenge-prompt { margin-bottom: 20px; }
+        .challenge-prompt h2 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--red); margin-bottom: 10px; }
+        .challenge-prompt p { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.7; }
+
+        /* CODE EDITOR */
+        .code-editor-container {
+            display: flex; border-radius: 10px; overflow: hidden;
+            border: 1px solid rgba(168,85,247,0.3);
+            margin-bottom: 16px;
+            box-shadow: 0 0 20px rgba(168,85,247,0.1);
+        }
+        .editor-lines {
+            background: rgba(0,0,0,0.5); padding: 16px 12px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: rgba(255,255,255,0.2); line-height: 1.7; min-width: 40px;
+            text-align: right; user-select: none;
+        }
+        #code-input {
+            flex: 1; background: rgba(0,0,0,0.4); color: #e0ffe8;
+            border: none; outline: none; padding: 16px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.87rem;
+            line-height: 1.7; resize: vertical; min-height: 200px;
+            caret-color: var(--purple);
+        }
+        #code-input:focus { background: rgba(168,85,247,0.05); }
+
+        /* LANG SELECTOR */
+        .lang-bar {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 16px;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(168,85,247,0.2);
+        }
+        .lang-label { font-size:0.72rem; color:var(--muted); font-weight:700; letter-spacing:1px; }
+        #lang-select {
+            background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.4);
+            color: #c084fc; border-radius: 8px; padding: 7px 14px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+            cursor: pointer; outline: none; min-width: 160px;
+        }
+        #lang-select option { background: #1a0a2e; color: #fff; }
+        #lang-select:focus { border-color: var(--purple); box-shadow: 0 0 10px rgba(168,85,247,0.3); }
+        #run-btn {
+            margin-left: auto;
+            background: rgba(0,200,100,0.1); border: 1px solid rgba(0,255,115,0.4);
+            color: var(--green); padding: 7px 20px; border-radius: 8px;
+            font-family: 'Orbitron',sans-serif; font-size:0.72rem; font-weight:700;
+            cursor:pointer; transition:all 0.3s; letter-spacing:1px;
+        }
+        #run-btn:hover { background:rgba(0,255,115,0.15); border-color:var(--green); box-shadow:0 0 15px rgba(0,255,115,0.3); }
+        #run-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+        /* ACTIONS BAR */
+        .terminal-actions {
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+            flex-wrap: wrap;
+        }
+        #battle-message {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+            color: rgba(255,255,255,0.5); flex: 1;
+        }
+
+        /* OUTPUT PANEL */
+        #code-output {
+            display: none;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+            line-height: 1.7; white-space: pre-wrap;
+            background: rgba(0,0,0,0.6); border-top: 1px solid rgba(168,85,247,0.2);
+            padding: 14px 18px; color: #00ff73; max-height: 160px; overflow-y: auto;
+        }
+        
+        /* BUTTONS */
+        #attack-btn {
+            background: linear-gradient(90deg, var(--red), #a50000);
+            border: none; color: #fff; padding: 14px 36px;
+            font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700;
+            letter-spacing: 2px; border-radius: 10px; cursor: pointer;
+            box-shadow: 0 0 30px rgba(255,26,26,0.4); transition: all 0.3s;
+            display: flex; align-items: center; gap: 10px; position: relative; overflow: hidden;
+        }
+        #attack-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-20deg);
+        }
+        #attack-btn:hover::after { left: 200%; transition: left 0.5s; }
+        #attack-btn:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(255,26,26,0.7); }
+        #attack-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+        #attack-btn.loading .btn-text { display: none; }
+        #attack-btn.loading .spinner { display: block; }
+
+        /* ── RESULT MODAL ── */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 500;
+            background: rgba(6,3,14,0.9); backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: linear-gradient(135deg, rgba(15,8,30,0.95), rgba(30,10,10,0.95));
+            border-radius: 24px; padding: 60px 60px;
+            text-align: center; max-width: 480px; width: 90%;
+            position: relative; animation: modalIn 0.4s ease;
+            border: 1px solid rgba(168,85,247,0.3);
+        }
+        @keyframes modalIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+
+        #result-title {
+            font-family: 'Orbitron', sans-serif; font-size: 3.5rem; font-weight: 900;
+            margin-bottom: 14px; text-transform: uppercase;
+        }
+        #result-title.victory { color: var(--green); text-shadow: 0 0 30px var(--green),0 0 60px rgba(0,255,115,0.4); }
+        #result-title.defeat { color: var(--red); text-shadow: 0 0 30px var(--red),0 0 60px rgba(255,26,26,0.4); }
+        #result-message { color: rgba(255,255,255,0.6); font-size: 0.95rem; margin-bottom: 25px; }
+        .stats-gained { margin-bottom: 30px; }
+        .xp-pill {
+            display: inline-block; padding: 10px 28px; border-radius: 30px;
+            background: rgba(0,255,115,0.1); border: 1px solid var(--green);
+            font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--green);
+        }
+        #next-level-btn {
+            width: 100%; padding: 16px; background: var(--purple);
+            border: none; color: #fff; border-radius: 10px;
+            font-family: 'Orbitron', sans-serif; font-size: 0.88rem; font-weight: 700;
+            letter-spacing: 2px; cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(168,85,247,0.5);
+        }
+        #next-level-btn:hover { background: #c084fc; box-shadow: 0 0 50px rgba(168,85,247,0.8); }
+
+        /* CORNER UI DECORATORS */
+        .corner { position: fixed; width: 80px; height: 80px; border: 2px solid rgba(168,85,247,0.4); z-index: 2; pointer-events: none; }
+        .corner-tl { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .corner-tr { top: 20px; right: 20px; border-left: none; border-bottom: none; border-color: rgba(255,26,26,0.4); }
+        .corner-bl { bottom: 20px; left: 20px; border-right: none; border-top: none; border-color: rgba(255,26,26,0.4); }
+        .corner-br { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+        /* HEX Symbols */
+        .hex-symbol {
+            position: fixed; font-size: 3rem; color: rgba(168,85,247,0.12);
+            pointer-events: none; z-index: 1; animation: hexFloat 8s ease-in-out infinite alternate;
+        }
+        @keyframes hexFloat { 0%{transform:translateY(0) rotate(0)} 100%{transform:translateY(-20px) rotate(10deg)} }
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUNDS -->
+    <div class="arena-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- CORNER UI DECORATORS -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- HEX SYMBOLS (matching reference) -->
+    <div class="hex-symbol" style="top:15%; left:3%;">⬡</div>
+    <div class="hex-symbol" style="top:45%; left:2%; animation-delay:2s;">⬢</div>
+    <div class="hex-symbol" style="top:70%; left:4%; animation-delay:4s; color:rgba(255,26,26,0.12);">⬡</div>
+    <div class="hex-symbol" style="top:15%; right:3%; color:rgba(255,26,26,0.12);">⬢</div>
+    <div class="hex-symbol" style="top:55%; right:2%; animation-delay:3s;">⬡</div>
+    <div class="hex-symbol" style="top:75%; right:4%; animation-delay:1s; color:rgba(255,26,26,0.12);">⬡</div>
+
+    <!-- NAVBAR -->
+    <nav class="arena-nav">
+        <div class="nav-logo">⚔ BRAWL.AI</div>
+        <button id="retreat-btn">◄ RETREAT</button>
+    </nav>
+
+    <!-- NEON TITLE SIGN -->
+    <div class="arena-title-block">
+        <div class="neon-sign">
+            <h1>TURBO<br>BATTLE ARENA</h1>
+        </div>
+    </div>
+
+    <!-- MAIN BATTLE AREA -->
+    <main class="battle-container">
+
+        <!-- HP BARS -->
+        <header class="battle-header">
+            <!-- PLAYER SIDE -->
+            <div class="combatant">
+                <div class="combatant-top">
+                    <div class="fighter-avatar player-avatar">🥷</div>
+                    <div class="fighter-details">
+                        <h3 id="player-name">PLAYER</h3>
+                        <span>Human Pilot</span>
+                    </div>
+                </div>
+                <div class="hp-row">
+                    <span style="color:rgba(255,255,255,0.5);font-size:0.7rem;">HP</span>
+                    <span id="player-hp-num" style="font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;">100/100</span>
+                </div>
+                <div class="hp-track">
+                    <div id="player-hp-bar" class="hp-bar" style="width:100%;"></div>
+                </div>
+            </div>
+
+            <!-- VS -->
+            <div class="vs-badge">VS</div>
+
+            <!-- AI SIDE -->
+            <div class="combatant">
+                <div class="combatant-top" style="flex-direction:row-reverse;">
+                    <div class="fighter-avatar ai-avatar">🤖</div>
+                    <div class="fighter-details" style="text-align:right;">
+                        <h3 id="ai-name">NEURAL_NET_V1</h3>
+                        <span>AI Construct</span>
+                    </div>
+                </div>
+                <div class="hp-row" style="flex-direction:row-reverse;">
+                    <span style="color:rgba(255,255,255,0.5);font-size:0.7rem;">HP</span>
+                    <span id="ai-hp-num" style="font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;">100/100</span>
+                </div>
+                <div class="hp-track">
+                    <div id="ai-hp-bar" class="hp-bar" style="width:100%;float:right;"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- TERMINAL / CODING SECTION -->
+        <section class="terminal-section">
+            <div class="terminal-header">
+                <div class="circles">
+                    <span class="circle red"></span>
+                    <span class="circle yellow"></span>
+                    <span class="circle green"></span>
+                </div>
+                <div class="terminal-title">⚡ BATTLE_TERMINAL.exe — Level <span id="challenge-level">1</span></div>
+            </div>
+
+            <!-- LOADING STATE -->
+            <div class="terminal-body" id="loading-overlay">
+                <div class="spin-ring"></div>
+                <div class="loading-text">Establishing neural link...</div>
+            </div>
+
+            <!-- BATTLE CONTENT -->
+            <div id="challenge-content">
+                <!-- LANGUAGE SELECTOR BAR -->
+                <div class="lang-bar">
+                    <span class="lang-label">LANGUAGE</span>
+                    <select id="lang-select">
+                        <!-- populated by JS -->
+                    </select>
+                    <button id="run-btn">▶ RUN</button>
+                </div>
+
+                <div class="terminal-body">
+                    <div class="challenge-prompt">
+                        <h2 id="challenge-title">Loading Challenge...</h2>
+                        <p id="challenge-desc">Please wait while the construct loads your battle protocol...</p>
+                    </div>
+                    <div class="code-editor-container">
+                        <div class="editor-lines" id="line-nums">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+                        <textarea id="code-input" spellcheck="false">// Select a language above to start coding
+</textarea>
+                    </div>
+                    <!-- OUTPUT PANEL -->
+                    <pre id="code-output"></pre>
+                    <div class="terminal-actions">
+                        <div id="battle-message">⚡ Select a language, write your code, then EXECUTE ATTACK to submit.</div>
+                        <button id="attack-btn">
+                            <span class="btn-text">⚡ EXECUTE ATTACK</span>
+                            <div class="spinner"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- VICTORY / DEFEAT MODAL -->
+    <div id="result-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="result-title" class="victory">VICTORY</h2>
+            <p id="result-message">Neural construct defeated. You have proven your worth.</p>
+            <div class="stats-gained">
+                <div class="xp-pill">+<span id="xp-gained">100</span> XP</div>
+            </div>
+            <button id="next-level-btn">RETURN TO LOBBY</button>
+        </div>
+    </div>
+
+    <script>
+        // Generate neon particles
+        const particlesEl = document.getElementById('particles');
+        for (let i = 0; i < 40; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const colors = ['rgba(168,85,247,0.7)','rgba(255,26,26,0.6)','rgba(0,200,255,0.4)'];
+            const size = Math.random() * 4 + 1;
+            p.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*3)]};left:${Math.random()*100}vw;top:${Math.random()*100}vh;animation-duration:${Math.random()*10+8}s;animation-delay:${Math.random()*8}s;`;
+            particlesEl.appendChild(p);
+        }
+    </script>
+
+    <script src="audio.js"></script>
+    <script src="battle.js"></script>
+</body>
+</html>

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl.AI - Combat Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #00ff73; --green-dim: rgba(0,255,115,0.12);
+            --yellow: #ffb800; --red: #ff003c; --cyan: #00c8ff;
+            --purple: #a855f7; --dark: #080c12; --card: #0e1420;
+            --border: rgba(0,255,115,0.2); --muted: #6a7b8c;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--dark); color:#fff; font-family:'Inter',sans-serif; min-height:100vh; overflow-x:hidden; }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width:5px; }
+        ::-webkit-scrollbar-track { background:var(--dark); }
+        ::-webkit-scrollbar-thumb { background:var(--green-dim); border-radius:3px; }
+
+        /* NAVBAR */
+        .navbar { display:flex; justify-content:space-between; align-items:center; padding:0 40px; height:70px; background:rgba(8,12,18,0.97); border-bottom:1px solid rgba(255,255,255,0.05); position:sticky; top:0; z-index:200; backdrop-filter:blur(12px); }
+        .nav-logo { font-family:'Orbitron',sans-serif; font-size:1.3rem; font-weight:900; color:var(--green); letter-spacing:2px; cursor:pointer; }
+        .nav-links { display:flex; gap:6px; }
+        .nav-link { color:var(--muted); text-decoration:none; font-size:0.82rem; font-weight:600; padding:8px 18px; border-radius:8px; cursor:pointer; transition:all 0.3s; border:none; background:transparent; font-family:'Inter',sans-serif; }
+        .nav-link:hover { color:#fff; background:rgba(255,255,255,0.05); }
+        .nav-link.active { color:var(--green); background:var(--green-dim); }
+        .nav-right { display:flex; align-items:center; gap:12px; }
+        .live-btn { background:var(--green); color:#000; padding:8px 18px; border-radius:8px; font-weight:700; font-size:0.78rem; letter-spacing:1px; display:flex; align-items:center; gap:6px; border:none; cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.3s; }
+        .live-btn:hover { background:#33ff8f; box-shadow:0 0 20px rgba(0,255,115,0.4); }
+        .live-dot { width:7px; height:7px; background:#000; border-radius:50%; animation:blink 1.2s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        #nav-username { font-weight:700; color:var(--green); font-size:0.88rem; }
+        #logout-btn { background:transparent; border:1px solid rgba(255,0,60,0.4); color:var(--red); padding:6px 14px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.3s; font-family:'Inter',sans-serif; }
+        #logout-btn:hover { background:var(--red); color:#fff; }
+
+        /* TABS */
+        .tab { display:none; animation:tabIn 0.3s ease; }
+        .tab.active { display:block; }
+        @keyframes tabIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+        .page { max-width:1300px; margin:0 auto; padding:30px 30px 80px; display:flex; flex-direction:column; gap:28px; }
+
+        /* CARDS / COMMON */
+        .card { background:var(--card); border-radius:16px; border:1px solid rgba(255,255,255,0.06); padding:26px; position:relative; overflow:hidden; }
+        .card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, var(--green), var(--cyan)); }
+        .sec-title { font-family:'Orbitron',sans-serif; font-size:0.82rem; font-weight:700; letter-spacing:2px; color:var(--green); text-transform:uppercase; margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+        .sec-title::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.05); }
+
+        /* HERO BANNER */
+        .hero-banner { border-radius:16px; overflow:hidden; position:relative; height:340px; border:1px solid rgba(0,255,115,0.12); }
+        .hero-banner img { width:100%; height:100%; object-fit:cover; opacity:0.5; display:block; }
+        .hero-overlay { position:absolute; inset:0; background:linear-gradient(90deg, rgba(8,12,18,0.96) 40%, transparent 80%); display:flex; flex-direction:column; justify-content:center; padding:50px; }
+        .hero-tag { color:var(--green); font-size:0.72rem; font-weight:700; letter-spacing:3px; margin-bottom:14px; }
+        .hero-title { font-family:'Orbitron',sans-serif; font-size:2.6rem; font-weight:900; line-height:1.15; margin-bottom:26px; text-transform:uppercase; }
+        .hero-title span { color:var(--green); }
+        .hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
+        .h-btn { padding:12px 28px; border-radius:8px; font-weight:700; font-size:0.82rem; letter-spacing:1px; cursor:pointer; text-decoration:none; transition:all 0.3s; border:none; font-family:'Inter',sans-serif; }
+        .h-btn-green { background:var(--green); color:#000; }
+        .h-btn-green:hover { background:#33ff8f; box-shadow:0 0 25px rgba(0,255,115,0.4); transform:translateY(-2px); }
+        .h-btn-outline { background:transparent; border:2px solid var(--yellow); color:var(--yellow); }
+        .h-btn-outline:hover { background:var(--yellow); color:#000; }
+
+        /* TICKER */
+        .ticker { background:#0a0e18; border-top:1px solid rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.03); padding:18px 0; display:flex; justify-content:space-evenly; font-family:'Orbitron',sans-serif; font-size:0.9rem; font-weight:700; color:var(--green); }
+        .ticker-item { display:flex; align-items:center; gap:12px; }
+        .ticker-dot { color:var(--purple); }
+
+        /* GRID LAYOUTS */
+        .g3 { display:grid; grid-template-columns:320px 1fr 300px; gap:22px; align-items:start; }
+        .g2 { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+        .g2-wide { display:grid; grid-template-columns:1fr 2fr; gap:22px; }
+
+        /* PROFILE CARD */
+        .avatar { width:72px; height:72px; border-radius:50%; border:2px solid var(--green); box-shadow:0 0 20px rgba(0,255,115,0.4); background:radial-gradient(circle at 40%35%,#00ff73 0%,#003a1a 100%); display:flex; align-items:center; justify-content:center; font-size:1.9rem; flex-shrink:0; }
+        .profile-name { font-family:'Orbitron',sans-serif; font-size:1.05rem; font-weight:700; }
+        .profile-rank { font-size:0.73rem; color:var(--yellow); font-weight:700; letter-spacing:1px; margin-top:4px; }
+        .profile-level { font-size:0.78rem; color:var(--muted); margin-top:2px; }
+        .xp-track { height:8px; background:rgba(255,255,255,0.07); border-radius:4px; overflow:hidden; margin:8px 0; }
+        .xp-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--green),var(--cyan)); border-radius:4px; transition:width 1.5s cubic-bezier(0.2,0.8,0.3,1); }
+        .mini-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
+        .stat-box { background:rgba(255,255,255,0.04); border-radius:10px; padding:14px 8px; text-align:center; border:1px solid rgba(255,255,255,0.06); transition:all 0.3s; cursor:default; }
+        .stat-box:hover { border-color:var(--green); background:var(--green-dim); }
+        .stat-val { font-family:'Orbitron',sans-serif; font-size:1.3rem; font-weight:700; }
+        .stat-lbl { font-size:0.6rem; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:1px; }
+        .c-green { color:var(--green); } .c-yellow { color:var(--yellow); } .c-cyan { color:var(--cyan); } .c-red { color:var(--red); } .c-purple { color:var(--purple); }
+
+        /* MODE CARDS */
+        .mode-card { background:var(--card); border-radius:12px; border:1px solid rgba(255,255,255,0.05); padding:20px 22px; display:flex; align-items:center; gap:18px; cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; margin-bottom:12px; }
+        .mode-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--c, var(--green)); border-radius:3px 0 0 3px; }
+        .mode-card:hover:not(.disabled) { border-color:var(--c, var(--green)); background:#141c28; transform:translateX(5px); }
+        .mode-card.disabled { opacity:0.5; cursor:not-allowed; }
+        .mode-icon { width:52px; height:52px; border-radius:12px; background:rgba(0,255,115,0.08); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; border:1px solid var(--c, var(--green)); }
+        .mode-name { font-family:'Orbitron',sans-serif; font-size:0.88rem; font-weight:700; margin-bottom:5px; }
+        .mode-desc { font-size:0.73rem; color:var(--muted); line-height:1.5; }
+        .badge { padding:5px 14px; border-radius:20px; font-size:0.68rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; cursor:pointer; border:none; font-family:'Inter',sans-serif; }
+        .badge-green { background:var(--green); color:#000; }
+        .badge-yellow { background:rgba(255,184,0,0.15); color:var(--yellow); border:1px solid var(--yellow); }
+        .badge-cyan { background:rgba(0,200,255,0.15); color:var(--cyan); border:1px solid var(--cyan); }
+        .badge-purple { background:rgba(168,85,247,0.15); color:var(--purple); border:1px solid var(--purple); }
+
+        /* CHALLENGE */
+        .challenge-card { background:var(--card); border-radius:16px; border:1px solid rgba(0,200,255,0.18); padding:22px; position:relative; overflow:hidden; }
+        .challenge-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--cyan),var(--purple)); }
+        .challenge-timer { display:flex; gap:10px; margin:14px 0; }
+        .time-box { background:rgba(0,200,255,0.1); border:1px solid rgba(0,200,255,0.25); border-radius:8px; padding:8px 12px; text-align:center; }
+        .time-num { font-family:'Orbitron',sans-serif; font-size:1.1rem; font-weight:700; color:var(--cyan); }
+        .time-lbl { font-size:0.58rem; color:var(--muted); letter-spacing:1px; }
+        .tag { padding:3px 10px; border-radius:20px; font-size:0.62rem; font-weight:700; text-transform:uppercase; display:inline-block; margin-right:6px; }
+        .tag-easy { background:rgba(0,255,115,0.15); color:var(--green); border:1px solid var(--green); }
+        .tag-hard { background:rgba(255,0,60,0.15); color:var(--red); border:1px solid var(--red); }
+        .tag-medium { background:rgba(255,184,0,0.15); color:var(--yellow); border:1px solid var(--yellow); }
+        .solve-btn { width:100%; padding:11px; background:rgba(0,200,255,0.08); border:1px solid var(--cyan); border-radius:8px; color:var(--cyan); font-weight:700; font-size:0.8rem; letter-spacing:1px; cursor:pointer; transition:all 0.3s; font-family:'Inter',sans-serif; margin-top:14px; }
+        .solve-btn:hover { background:var(--cyan); color:#000; box-shadow:0 0 20px rgba(0,200,255,0.4); }
+
+        /* LEADERBOARD */
+        .lb-row { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; margin-bottom:4px; transition:all 0.3s; }
+        .lb-row:hover { background:rgba(255,255,255,0.04); }
+        .lb-rank { font-family:'Orbitron',sans-serif; font-size:0.85rem; font-weight:700; width:32px; text-align:center; }
+        .lb-av { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#1a3a1a,#003a1a); display:flex; align-items:center; justify-content:center; font-size:0.85rem; border:1px solid rgba(0,255,115,0.3); }
+        .lb-name { flex:1; font-size:0.85rem; font-weight:600; }
+        .lb-xp { font-size:0.75rem; color:var(--muted); }
+        .lb-level { font-size:0.8rem; font-weight:700; color:var(--green); }
+
+        /* MATCH HISTORY */
+        .match-row { display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.05); margin-bottom:10px; transition:all 0.3s; background:rgba(255,255,255,0.02); }
+        .match-row:hover { background:rgba(255,255,255,0.04); border-color:rgba(0,255,115,0.1); }
+        .match-result { font-family:'Orbitron',sans-serif; font-size:0.78rem; font-weight:700; padding:5px 12px; border-radius:6px; }
+        .win { background:rgba(0,255,115,0.15); color:var(--green); }
+        .loss { background:rgba(255,0,60,0.12); color:var(--red); }
+
+        /* CHALLENGE GRID */
+        .challenge-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+        .ch-card { background:var(--card); border-radius:12px; border:1px solid rgba(255,255,255,0.06); padding:20px; transition:all 0.3s; cursor:pointer; }
+        .ch-card:hover { border-color:var(--cyan); transform:translateY(-4px); box-shadow:0 10px 30px rgba(0,200,255,0.1); }
+        .ch-title { font-weight:700; font-size:0.9rem; margin-bottom:8px; }
+        .ch-desc { font-size:0.75rem; color:var(--muted); line-height:1.5; margin-bottom:14px; }
+        .ch-footer { display:flex; align-items:center; justify-content:space-between; }
+        .ch-xp { font-size:0.75rem; color:var(--yellow); font-weight:700; }
+
+        /* FULL LEADERBOARD TABLE */
+        table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+        th { text-align:left; padding:12px 16px; color:var(--muted); font-size:0.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.05); }
+        td { padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.04); }
+        tr:hover td { background:rgba(255,255,255,0.03); }
+
+        /* TOAST */
+        .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px); background:#1e2430; border:1px solid var(--green); border-radius:10px; padding:12px 28px; font-size:0.85rem; font-weight:600; color:#fff; z-index:9999; transition:transform 0.4s ease, opacity 0.4s ease; opacity:0; }
+        .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+        @media(max-width:1100px) { .g3{grid-template-columns:1fr 1fr} }
+        @media(max-width:768px) { .g3,.g2,.g2-wide{grid-template-columns:1fr} .hero-title{font-size:1.8rem} }
+    </style>
+</head>
+<body>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast">✓ Action Complete</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-logo" onclick="switchTab('dashboard')">⚔ BRAWL.AI</div>
+    <div class="nav-links">
+        <button class="nav-link active" onclick="switchTab('dashboard')" data-tab="dashboard">Dashboard</button>
+        <button class="nav-link" onclick="switchTab('leaderboard')" data-tab="leaderboard">Leaderboard</button>
+        <button class="nav-link" onclick="switchTab('challenges')" data-tab="challenges">Challenges</button>
+        <button class="nav-link" onclick="switchTab('profile')" data-tab="profile">Profile</button>
+    </div>
+    <div class="nav-right">
+        <span id="nav-username">PILOT</span>
+        <button id="logout-btn">LOGOUT</button>
+        <button class="live-btn" onclick="showToast('🔴 No live stream active')"><div class="live-dot"></div>LIVE STREAMING</button>
+    </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     TAB 1: DASHBOARD
+══════════════════════════════════════════ -->
+<div class="tab active" id="tab-dashboard">
+    <div class="page">
+
+        <!-- HERO -->
+        <div class="hero-banner">
+            <img src="lobby_hero.png" alt="Arena">
+            <div class="hero-overlay">
+                <div class="hero-tag"># Only The SMARTEST Survive</div>
+                <h1 class="hero-title">COMPILE. BATTLE.<br><span>DOMINATE.</span></h1>
+                <div class="hero-btns">
+                    <button class="h-btn h-btn-green" onclick="triggerBattle()">EXPLORE MORE →</button>
+                    <button class="h-btn h-btn-outline" onclick="switchTab('challenges')">BROWSE MODES →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TICKER -->
+        <div class="ticker">
+            <div class="ticker-item"><span class="ticker-dot">✦</span> GAMING CODING</div>
+            <div class="ticker-item"><span class="ticker-dot">✦</span> ACTION - PACKED</div>
+            <div class="ticker-item"><span class="ticker-dot">✦</span> MIND - BENDING</div>
+        </div>
+
+        <!-- 3-COL GRID -->
+        <div class="g3">
+
+            <!-- PROFILE -->
+            <div class="card">
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+                    <div class="avatar" id="profile-avatar">⚡</div>
+                    <div>
+                        <div class="profile-name" id="display-username">PILOT</div>
+                        <div class="profile-rank" id="display-rank">⭐ BRONZE HACKER</div>
+                        <div class="profile-level">Level <span id="display-level">1</span></div>
+                    </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:6px;font-weight:600;">
+                    <span>EXPERIENCE</span><span id="xp-label">0 / 1000 XP</span>
+                </div>
+                <div class="xp-track"><div class="xp-fill" id="xp-bar"></div></div>
+                <div class="mini-stats">
+                    <div class="stat-box"><div class="stat-val c-green" id="stat-wins">0</div><div class="stat-lbl">Wins</div></div>
+                    <div class="stat-box"><div class="stat-val c-yellow" id="stat-battles">0</div><div class="stat-lbl">Battles</div></div>
+                    <div class="stat-box"><div class="stat-val c-cyan" id="stat-acc">0%</div><div class="stat-lbl">Accuracy</div></div>
+                </div>
+                <div style="margin-top:16px;">
+                    <button class="solve-btn" onclick="switchTab('profile')">VIEW FULL PROFILE →</button>
+                </div>
+            </div>
+
+            <!-- GAME MODES -->
+            <div>
+                <div class="sec-title">Game Modes</div>
+
+                <div class="mode-card" style="--c:var(--green);" onclick="triggerBattle()">
+                    <div class="mode-icon">🤖</div>
+                    <div style="flex:1">
+                        <div class="mode-name">Player vs AI</div>
+                        <div class="mode-desc">Battle advanced neural networks. Solve coding challenges against AI opponents.</div>
+                    </div>
+                    <button class="badge badge-green">PLAY NOW</button>
+                </div>
+
+                <div class="mode-card" style="--c:var(--yellow);" onclick="window.location.href='royale.html'">
+                    <div class="mode-icon" style="background:rgba(255,184,0,0.1);border-color:var(--yellow);">⚔️</div>
+                    <div style="flex:1">
+                        <div class="mode-name">Battle Royale (100 P)</div>
+                        <div class="mode-desc">Survive against 99 rogue AI bots in our most intense 100-player carnage.</div>
+                    </div>
+                    <button class="badge badge-yellow">DEPLOY NOW</button>
+                </div>
+
+                <div class="mode-card disabled" style="--c:var(--purple);">
+                    <div class="mode-icon" style="background:rgba(168,85,247,0.1);border-color:var(--purple);">👥</div>
+                    <div style="flex:1">
+                        <div class="mode-name">Group Tournament</div>
+                        <div class="mode-desc">Form a squad, enter team tournaments and conquer the global ladder.</div>
+                    </div>
+                    <span class="badge badge-purple">SOON</span>
+                </div>
+
+                <div class="mode-card" style="--c:var(--cyan);" onclick="switchTab('challenges')">
+                    <div class="mode-icon" style="background:rgba(0,200,255,0.1);border-color:var(--cyan);">📋</div>
+                    <div style="flex:1">
+                        <div class="mode-name">Daily Missions</div>
+                        <div class="mode-desc">Complete daily coding missions to earn bonus XP, tokens and badges.</div>
+                    </div>
+                    <button class="badge badge-cyan">ACTIVE</button>
+                </div>
+            </div>
+
+            <!-- RIGHT COL -->
+            <div style="display:flex;flex-direction:column;gap:20px;">
+
+                <!-- DAILY CHALLENGE -->
+                <div class="challenge-card">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:0.78rem;color:var(--cyan);letter-spacing:2px;margin-bottom:12px;"># DAILY CHALLENGE</div>
+                    <div style="font-weight:700;font-size:0.95rem;margin-bottom:8px;" id="ch-title">Two Sum Optimized</div>
+                    <div style="margin-bottom:10px;"><span class="tag tag-medium">Medium</span><span class="tag tag-easy">+150 XP</span></div>
+                    <div style="font-size:0.75rem;color:var(--muted);line-height:1.5;margin-bottom:14px;">Given an array and a target, return indices of two numbers that add up to target. Use O(n) time.</div>
+                    <div style="font-size:0.68rem;color:var(--muted);font-weight:700;margin-bottom:8px;">⏱ RESETS IN:</div>
+                    <div class="challenge-timer">
+                        <div class="time-box"><div class="time-num" id="t-h">00</div><div class="time-lbl">HRS</div></div>
+                        <div class="time-box"><div class="time-num" id="t-m">00</div><div class="time-lbl">MIN</div></div>
+                        <div class="time-box"><div class="time-num" id="t-s">00</div><div class="time-lbl">SEC</div></div>
+                    </div>
+                    <button class="solve-btn" onclick="switchTab('challenges')">SOLVE CHALLENGE →</button>
+                </div>
+
+                <!-- MINI LEADERBOARD -->
+                <div class="card" style="overflow:hidden;">
+                    <div class="sec-title">Top Pilots</div>
+                    <div id="mini-leaderboard"><div style="text-align:center;color:var(--muted);padding:20px;font-size:0.82rem;">Loading...</div></div>
+                    <button class="solve-btn" style="margin-top:8px;" onclick="switchTab('leaderboard')">VIEW FULL LEADERBOARD →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MATCH HISTORY STRIP -->
+        <div class="card">
+            <div class="sec-title">Recent Match History</div>
+            <div id="match-history-list"><div style="text-align:center;color:var(--muted);padding:20px;">No matches yet. Start a battle!</div></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 2: LEADERBOARD
+══════════════════════════════════════════ -->
+<div class="tab" id="tab-leaderboard">
+    <div class="page">
+        <div class="hero-banner" style="height:180px;">
+            <div class="hero-overlay" style="background:linear-gradient(90deg,rgba(8,12,18,0.97) 0%,rgba(8,12,18,0.6) 100%);">
+                <div class="hero-tag"># Global Rankings</div>
+                <h1 class="hero-title" style="font-size:2rem;">TOP <span>PILOTS</span></h1>
+            </div>
+        </div>
+
+        <div class="g2">
+            <!-- FULL TABLE -->
+            <div class="card" style="grid-column:span 2;">
+                <div class="sec-title">Global Leaderboard</div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Pilot</th><th>Level</th><th>XP</th><th>Win Rate</th><th>Battles</th><th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lb-table-body">
+                            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px;">Loading rankings...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="g3" style="grid-template-columns:1fr 1fr 1fr;">
+            <div class="card" style="text-align:center;">
+                <div style="font-size:3rem;margin-bottom:10px;">🏆</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;color:var(--yellow);">100M+</div>
+                <div style="color:var(--muted);font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;margin-top:6px;">Total Pilots</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div style="font-size:3rem;margin-bottom:10px;">⚔️</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;color:var(--green);">550K+</div>
+                <div style="color:var(--muted);font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;margin-top:6px;">Battles Fought</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div style="font-size:3rem;margin-bottom:10px;">🟢</div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;color:var(--cyan);">150K</div>
+                <div style="color:var(--muted);font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;margin-top:6px;">Online Now</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 3: CHALLENGES
+══════════════════════════════════════════ -->
+<div class="tab" id="tab-challenges">
+    <div class="page">
+        <div class="hero-banner" style="height:180px;">
+            <div class="hero-overlay" style="background:linear-gradient(90deg,rgba(8,12,18,0.97) 0%,rgba(8,12,18,0.6) 100%);">
+                <div class="hero-tag"># Daily Coding Challenges</div>
+                <h1 class="hero-title" style="font-size:2rem;">SOLVE. EARN. <span>RANK.</span></h1>
+            </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="badge badge-green" onclick="filterCh('all')">All</button>
+            <button class="badge" style="background:rgba(0,255,115,0.15);border:1px solid var(--green);color:var(--green);" onclick="filterCh('easy')">Easy</button>
+            <button class="badge badge-yellow" onclick="filterCh('medium')">Medium</button>
+            <button class="badge" style="background:rgba(255,0,60,0.15);border:1px solid var(--red);color:var(--red);" onclick="filterCh('hard')">Hard</button>
+        </div>
+
+        <!-- CHALLENGE CARDS -->
+        <div class="challenge-grid" id="challenge-grid">
+            <!-- populated by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 4: PROFILE
+══════════════════════════════════════════ -->
+<div class="tab" id="tab-profile">
+    <div class="page">
+
+        <!-- Profile Hero -->
+        <div class="card" style="display:flex;align-items:center;gap:28px;padding:36px;">
+            <div class="avatar" style="width:100px;height:100px;font-size:2.5rem;" id="big-avatar">⚡</div>
+            <div style="flex:1;">
+                <div style="font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:900;" id="p-username">PILOT</div>
+                <div style="color:var(--yellow);font-weight:700;margin:6px 0;" id="p-rank">⭐ BRONZE HACKER</div>
+                <div style="color:var(--muted);font-size:0.88rem;">Level <span id="p-level">1</span> • Joined 2026</div>
+                <div style="margin-top:14px;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:6px;font-weight:600;">
+                        <span>XP PROGRESS</span><span id="p-xp-label">0 / 1000</span>
+                    </div>
+                    <div class="xp-track" style="height:10px;"><div class="xp-fill" id="p-xp-bar"></div></div>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <button class="badge badge-green" onclick="showToast('🏅 Profile updated!')">EDIT PROFILE</button>
+                <button class="badge badge-cyan" onclick="showToast('🔗 Link copied!')">SHARE</button>
+            </div>
+        </div>
+
+        <!-- STATS GRID -->
+        <div class="g3" style="grid-template-columns:repeat(4,1fr);">
+            <div class="stat-box"><div class="stat-val c-green" id="p-wins">0</div><div class="stat-lbl">Total Wins</div></div>
+            <div class="stat-box"><div class="stat-val c-yellow" id="p-battles">0</div><div class="stat-lbl">Battles</div></div>
+            <div class="stat-box"><div class="stat-val c-cyan" id="p-acc">0%</div><div class="stat-lbl">Accuracy</div></div>
+            <div class="stat-box"><div class="stat-val c-purple" id="p-rank-num">—</div><div class="stat-lbl">Rank</div></div>
+        </div>
+
+        <div class="g2">
+            <!-- MATCH HISTORY -->
+            <div class="card">
+                <div class="sec-title">Match History</div>
+                <div id="profile-match-list"><div style="text-align:center;color:var(--muted);padding:20px;font-size:0.85rem;">No battles yet</div></div>
+            </div>
+
+            <!-- ACHIEVEMENTS -->
+            <div class="card">
+                <div class="sec-title">Achievements</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="achievements">
+                    <div class="stat-box"><div style="font-size:2rem;margin-bottom:6px;">🔰</div><div class="stat-lbl">First Battle</div></div>
+                    <div class="stat-box" style="opacity:0.4;"><div style="font-size:2rem;margin-bottom:6px;">🏆</div><div class="stat-lbl">First Win</div></div>
+                    <div class="stat-box" style="opacity:0.4;"><div style="font-size:2rem;margin-bottom:6px;">⚡</div><div class="stat-lbl">5-Win Streak</div></div>
+                    <div class="stat-box" style="opacity:0.4;"><div style="font-size:2rem;margin-bottom:6px;">💯</div><div class="stat-lbl">Centurion (100)</div></div>
+                    <div class="stat-box" style="opacity:0.4;"><div style="font-size:2rem;margin-bottom:6px;">💎</div><div class="stat-lbl">Diamond Rank</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const API = '/api';
+let currentUser = null;
+
+// ── TAB SWITCHER ──
+function switchTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    const btn = document.querySelector(`[data-tab="${name}"]`);
+    if (btn) btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (name === 'leaderboard') loadFullLeaderboard();
+    if (name === 'challenges') renderChallenges('all');
+    if (name === 'profile') loadProfile();
+}
+
+// ── TOAST ──
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── BATTLE ──
+function triggerBattle() {
+    showToast('⚔ Launching Combat Arena...');
+    setTimeout(() => { window.location.href = 'battle.html'; }, 800);
+}
+
+// ── COUNTDOWN ──
+function startCountdown() {
+    const reset = new Date(); reset.setHours(24,0,0,0);
+    function tick() {
+        const d = reset - Date.now();
+        if (d <= 0) return;
+        document.getElementById('t-h').textContent = String(Math.floor(d/3600000)).padStart(2,'0');
+        document.getElementById('t-m').textContent = String(Math.floor((d%3600000)/60000)).padStart(2,'0');
+        document.getElementById('t-s').textContent = String(Math.floor((d%60000)/1000)).padStart(2,'0');
+    }
+    tick(); setInterval(tick, 1000);
+}
+
+// ── LOAD USER DATA ──
+async function loadDashboard() {
+    currentUser = localStorage.getItem('brawl_current_user');
+    if (!currentUser) { window.location.href = 'login.html'; return; }
+    document.getElementById('nav-username').textContent = currentUser.toUpperCase();
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('brawl_current_user');
+        showToast('👋 Logging out...');
+        setTimeout(() => window.location.href = 'login.html', 800);
+    });
+
+    try {
+        const r = await fetch(`${API}/user/profile/${currentUser}`);
+        const d = await r.json();
+        if (!r.ok) return;
+        const xp = d.xp||0, level = d.level||1, needed = level*1000;
+        const pct = Math.min((xp/needed)*100, 100);
+        const wins = d.stats?.aiDefeated||0;
+        const battles = d.matches?.length||0;
+        const acc = battles > 0 ? Math.round((wins/battles)*100) : 0;
+        const RANKS = ['BRONZE HACKER','SILVER CODER','GOLD ENGINEER','PLATINUM NINJA','DIAMOND ARCHITECT','MASTER PILOT'];
+        const rank = RANKS[Math.min(level-1, RANKS.length-1)];
+
+        ['display-username','p-username'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = currentUser.toUpperCase(); });
+        ['display-level','p-level'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = level; });
+        ['display-rank','p-rank'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = '⭐ '+rank; });
+        ['xp-label','p-xp-label'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = `${xp} / ${needed} XP`; });
+        ['stat-wins','p-wins'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = wins; });
+        ['stat-battles','p-battles'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = battles; });
+        ['stat-acc','p-acc'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = acc+'%'; });
+        if(document.getElementById('p-rank-num')) document.getElementById('p-rank-num').textContent = '#'+Math.floor(Math.random()*500+1);
+
+        setTimeout(() => {
+            ['xp-bar','p-xp-bar'].forEach(id => { const el=document.getElementById(id); if(el) el.style.width = Math.max(pct,2)+'%'; });
+        }, 600);
+
+        // Match history
+        renderMatchHistory(d.matches||[]);
+    } catch(e) {
+        const un = currentUser.toUpperCase();
+        document.getElementById('display-username').textContent = un;
+    }
+
+    // Set a random Daily Challenge
+    const daily = CHALLENGES[Math.floor(Math.random() * CHALLENGES.length)];
+    const chTitle = document.getElementById('ch-title');
+    if (chTitle) {
+        chTitle.textContent = daily.title;
+        const tagBox = chTitle.nextElementSibling;
+        if (tagBox) tagBox.innerHTML = `<span class="tag tag-${daily.diff}">${daily.diff.charAt(0).toUpperCase() + daily.diff.slice(1)}</span><span class="tag tag-easy">+${daily.xp} XP</span>`;
+        const descBox = tagBox.nextElementSibling;
+        if (descBox && daily.desc) descBox.textContent = daily.desc;
+    }
+
+    startCountdown();
+}
+
+async function loadMiniLeaderboard() {
+    try {
+        const r = await fetch(`${API}/leaderboard`);
+        const data = await r.json();
+        const medals = ['🥇','🥈','🥉'];
+        const rc = ['c-yellow','',''];
+        document.getElementById('mini-leaderboard').innerHTML = data.slice(0,5).map((p,i) => `
+            <div class="lb-row">
+                <div class="lb-rank ${rc[i]||''}">${medals[i]||'#'+(i+1)}</div>
+                <div class="lb-av">⚡</div>
+                <div class="lb-name">${p.username.toUpperCase()}</div>
+                <div class="lb-level">LVL ${p.level}</div>
+            </div>`).join('');
+    } catch(e) {}
+}
+
+async function loadFullLeaderboard() {
+    try {
+        const r = await fetch(`${API}/leaderboard`);
+        const data = await r.json();
+        const medals = ['🥇','🥈','🥉'];
+        const statuses = ['🟢 Online','🟡 In Battle','⚫ Offline'];
+        document.getElementById('lb-table-body').innerHTML = data.map((p,i) => `
+            <tr>
+                <td><strong class="${i<3?'c-yellow':''}">${medals[i]||'#'+(i+1)}</strong></td>
+                <td><strong>${p.username.toUpperCase()}</strong></td>
+                <td class="c-green">LVL ${p.level}</td>
+                <td class="c-cyan">${p.xp||0} XP</td>
+                <td>${Math.round(Math.random()*60+30)}%</td>
+                <td>${Math.floor(Math.random()*200+10)}</td>
+                <td>${statuses[Math.floor(Math.random()*3)]}</td>
+            </tr>`).join('');
+    } catch(e) {
+        document.getElementById('lb-table-body').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px;">Could not load leaderboard. Is the backend running?</td></tr>';
+    }
+}
+
+function renderMatchHistory(matches) {
+    const list = matches.slice(-5).reverse();
+    if (list.length === 0) return;
+    const html = list.map(m => `
+        <div class="match-row">
+            <span class="match-result ${m.result==='VICTORY'?'win':'loss'}">${m.result==='VICTORY'?'WIN':'LOSS'}</span>
+            <span style="flex:1;font-size:0.85rem;font-weight:600;">${(m.opponent||'AI BOT').toUpperCase()}</span>
+            <span style="font-size:0.75rem;color:var(--muted);">${m.mode||'PvAI'}</span>
+            <span style="font-size:0.75rem;color:var(--yellow);font-weight:700;">${m.xpChange>0?'+':''}${m.xpChange||0} XP</span>
+        </div>`).join('');
+    ['match-history-list','profile-match-list'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = html;
+    });
+}
+
+function loadProfile() {
+    // profile data already loaded in loadDashboard, just re-trigger XP animation
+    setTimeout(() => {
+        const bar = document.getElementById('p-xp-bar');
+        if (bar && bar.style.width === '0%') bar.style.width = document.getElementById('xp-bar').style.width;
+    }, 300);
+}
+
+// ── CHALLENGES ──
+const CHALLENGES = [
+    { title:'Two Sum', diff:'easy', xp:100, desc:'Find two numbers that add up to target. O(n) solution required.' },
+    { title:'Valid Parentheses', diff:'easy', xp:80, desc:'Check if string brackets (), [], {} are valid and properly closed.' },
+    { title:'Climbing Stairs', diff:'easy', xp:110, desc:'How many ways to reach the top? Solve using Fibonacci patterns.' },
+    { title:'Reverse Linked List', diff:'easy', xp:120, desc:'Reverse a singly linked list iteratively and recursively.' },
+    { title:'Binary Search', diff:'easy', xp:100, desc:'Implement binary search on a sorted array.' },
+    { title:'Palindrome Number', diff:'easy', xp:90, desc:'Check if an integer is a palindrome without string conversion.' },
+    
+    { title:'Merge Sort', diff:'medium', xp:200, desc:'Implement merge sort algorithm from scratch.' },
+    { title:'Longest Substring', diff:'medium', xp:210, desc:'Find the longest substring without repeating characters.' },
+    { title:'Coin Change', diff:'medium', xp:240, desc:'Find the fewest coins needed to make up a given amount.' },
+    { title:'Binary Tree Traversal', diff:'medium', xp:190, desc:'Return the level order traversal of a binary tree.' },
+    { title:'LRU Cache', diff:'medium', xp:250, desc:'Design and implement a Least Recently Used cache.' },
+    { title:'Word Break', diff:'medium', xp:220, desc:'Given a string and a dictionary, segment the string using DP.' },
+    { title:'Jump Game', diff:'medium', xp:210, desc:'Determine if you can reach the last index of an array.' },
+    
+    { title:'Median of Arrays', diff:'hard', xp:400, desc:'Find the median of two sorted arrays in O(log(m+n)).' },
+    { title:'N-Queens', diff:'hard', xp:450, desc:'Solve the N-Queens puzzle for any board size using backtracking.' },
+    { title:'Graph Shortest Path', diff:'hard', xp:380, desc:'Find the shortest path in a weighted graph using Dijkstra.' },
+    { title:'Edit Distance', diff:'hard', xp:420, desc:'Find the minimum ops to convert one string into another.' },
+    { title:'Trapping Rain Water', diff:'hard', xp:460, desc:'Calculate how much water a terrain can trap after rain.' },
+    { title:'Sudoku Solver', diff:'hard', xp:500, desc:'Write a program to solve a Sudoku puzzle using recursion.' },
+    { title:'Serialize Binary Tree', diff:'hard', xp:410, desc:'Design an algorithm to serialize and deserialize a binary tree.' },
+];
+
+function renderChallenges(filter) {
+    const g = document.getElementById('challenge-grid');
+    const list = filter === 'all' ? CHALLENGES : CHALLENGES.filter(c => c.diff === filter);
+    g.innerHTML = list.map(c => `
+        <div class="ch-card" onclick="showToast('🧩 Opening: ${c.title}')">
+            <div style="margin-bottom:10px;"><span class="tag tag-${c.diff}">${c.diff.charAt(0).toUpperCase()+c.diff.slice(1)}</span></div>
+            <div class="ch-title">${c.title}</div>
+            <div class="ch-desc">${c.desc}</div>
+            <div class="ch-footer">
+                <span class="ch-xp">+${c.xp} XP</span>
+                <button class="solve-btn" style="width:auto;padding:7px 16px;margin-top:0;" onclick="event.stopPropagation();showToast('⚔ Launching: ${c.title}')">SOLVE →</button>
+            </div>
+        </div>`).join('');
+}
+function filterCh(f) { renderChallenges(f); }
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+<script src="audio.js"></script>
+</body>
+</html>

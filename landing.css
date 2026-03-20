@@ -1,0 +1,255 @@
+/* landing.css - Specific styles for the new Esports-style Landing Page */
+
+:root {
+    --brand-green: #00ff73;
+    --brand-yellow: #ffb800;
+    --brand-dark: #0a0f16;
+    --brand-card: #151b24;
+    --text-muted: #8b9fb1;
+}
+
+body {
+    background-color: var(--brand-dark);
+    margin: 0;
+    font-family: 'Rajdhani', sans-serif;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* Base resets handled by style.css, overriding Specifics */
+a { text-decoration: none; color: inherit; }
+
+/* Navbar */
+.landing-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 255, 115, 0.2);
+    position: relative;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--brand-green);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nav-logo span { color: #fff; }
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.nav-links a:hover { color: var(--brand-green); }
+
+.nav-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.stream-btn {
+    background: var(--brand-green);
+    color: #000;
+    padding: 10px 25px;
+    font-weight: 700;
+    border-radius: 4px;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    transition: all 0.3s ease;
+}
+.stream-btn:hover { background: #fff; }
+
+/* Hero Section */
+.hero-wrapper {
+    text-align: center;
+    padding: 80px 20px 150px;
+    position: relative;
+}
+
+.hero-subtitle {
+    color: var(--brand-green);
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin: 0 auto 30px auto;
+    max-width: 800px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+.hero-title span { color: var(--brand-green); }
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.btn-green {
+    background: var(--brand-green);
+    color: #000;
+    padding: 15px 35px;
+    font-weight: 700;
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+    transition: 0.3s;
+}
+.btn-green:hover { background: #fff; }
+
+.btn-yellow {
+    background: var(--brand-yellow);
+    color: #000;
+    padding: 15px 35px;
+    font-weight: 700;
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+    transition: 0.3s;
+}
+.btn-yellow:hover { background: #fff; }
+
+/* Big Tournament Card */
+.tournament-card-wrapper {
+    position: relative;
+    max-width: 1000px;
+    margin: -80px auto 100px;
+    z-index: 10;
+}
+
+.tournament-card {
+    background: linear-gradient(135deg, rgba(20,30,20,0.9), rgba(10,20,25,0.95));
+    border: 1px solid var(--brand-green);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 255, 115, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.tournament-card h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+.tournament-card p {
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.fighter-art {
+    position: absolute;
+    bottom: 0;
+    height: 120%;
+    z-index: 2;
+    pointer-events: none;
+}
+.fighter-left { left: -50px; }
+.fighter-right { right: -50px; transform: scaleX(-1); }
+
+/* Ticker Strip */
+.features-strip {
+    background: #0d141e;
+    padding: 30px 0;
+    display: flex;
+    justify-content: space-evenly;
+    border-top: 1px solid #1a2635;
+    border-bottom: 1px solid #1a2635;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--brand-green);
+    text-transform: uppercase;
+    margin-bottom: 80px;
+}
+.strip-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.strip-icon { color: #d000ff; }
+
+/* About Section */
+.about-section {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto 100px;
+    gap: 60px;
+    padding: 0 20px;
+}
+
+.about-image {
+    flex: 1;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.about-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+}
+
+.about-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.about-subtitle {
+    color: var(--brand-green);
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.about-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 40px;
+}
+
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.feature-item {
+    display: flex;
+    gap: 20px;
+}
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--text-muted);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+.feature-text h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    margin: 0 0 8px 0;
+}
+.feature-text p {
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}

@@ -1,0 +1,95 @@
+/* ========================================
+   CYBERPUNK GAMING INTERFACE UPGRADES
+======================================== */
+
+/* 1. BODY BACKGROUND */
+body {
+    background: radial-gradient(circle at center, #1a0505, #070101) !important;
+    position: relative;
+    /* Add smooth transitions globally for inherited properties */
+    transition: all 0.3s ease;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    box-shadow: inset 0 0 150px rgba(255, 0, 60, 0.2);
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* 2. BRAWL.AI TITLE */
+h1, .glitch {
+    text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 40px #00f3ff !important;
+    font-weight: 900 !important;
+    letter-spacing: 8px !important;
+    color: #ffffff;
+}
+
+/* 3. TAGLINE */
+h2, .hero-section p, .tagline {
+    color: #00f3ff !important;
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.5) !important;
+    letter-spacing: 4px !important;
+}
+
+/* 4. LOGIN CARD (.login-container / .auth-form / .hero-section etc) */
+.login-container, .auth-form, .hero-section, .auth-container {
+    background: rgba(10, 15, 28, 0.6) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(0, 255, 255, 0.2) !important;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* 5. INPUT FIELDS */
+input {
+    background: rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid #00f3ff !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease !important;
+}
+
+input:focus {
+    box-shadow: 0 0 10px #00f3ff !important;
+    outline: none !important;
+}
+
+/* 6. BUTTONS */
+button, .cyber-btn, .action-btn {
+    background: transparent !important;
+    border: 1px solid #00f3ff !important;
+    color: #00f3ff !important;
+    transition: all 0.3s ease !important;
+}
+
+button:hover, .cyber-btn:hover, .action-btn:hover {
+    background: #00f3ff !important;
+    color: #000000 !important;
+    box-shadow: 0 0 20px #00f3ff !important;
+    transform: scale(1.05) !important;
+}
+
+/* 7. TEXT CONTRAST */
+* {
+    color: #ffffff;
+}
+input, button {
+    color: inherit;
+}
+
+/* 8. XP BAR */
+.xp-bar {
+    background: linear-gradient(90deg, #00f3ff, #0088ff) !important;
+    box-shadow: 0 0 15px #00f3ff !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Base transitions on standard interactives */
+div, section, header, nav, form, p, span {
+    transition: all 0.3s ease;
+}
+
+/* Removed lighting to show background */

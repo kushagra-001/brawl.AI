@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl.AI - Only The Smartest Survive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #0b1016;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #161c24 0%, #0b1016 100%);
+        }
+
+        /* Moving Background Beams */
+        .bg-beams {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .beam {
+            position: absolute;
+            background: linear-gradient(to bottom, transparent, rgba(162,56,255,0.05), transparent);
+            width: 2px;
+            height: 100vh;
+            top: -100vh;
+            animation: beamFall 15s linear infinite;
+        }
+        @keyframes beamFall {
+            0% { transform: translateY(0) rotate(25deg); }
+            100% { transform: translateY(200vh) rotate(25deg); }
+        }
+
+        /* Floating Particles */
+        .particles-container {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 20s linear infinite;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+        }
+
+        /* Subtle atmospheric backdrop mimicking the dark forest/cave in the reference */
+        body::before {
+            content: ''; position: absolute; top: -10%; right: -20%;
+            width: 1200px; height: 1200px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(162,56,255,0.12) 0%, transparent 60%);
+            z-index: 0; pointer-events: none;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        body::after {
+            content: ''; position: absolute; bottom: 80px; left: 0;
+            width: 100%; height: 400px;
+            background: linear-gradient(to top, #010203 0%, transparent 100%);
+            z-index: 5; pointer-events: none;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 40px 80px; z-index: 10;
+        }
+
+        .logo { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; 
+            display: flex; align-items: center; gap: 5px;
+        }
+        
+        .nav-links { display: flex; gap: 50px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; }
+        .nav-links a { color: #8b9fb1; text-decoration: none; transition: color 0.3s; text-transform: uppercase; }
+        .nav-links a:hover { color: #fff; }
+
+        .create-btn {
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 30px;
+            padding: 12px 30px; color: #fff; text-decoration: none;
+            font-size: 0.75rem; font-weight: 800; transition: border 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .create-btn:hover { border-color: #a238ff; }
+
+        /* Main Content Container */
+        .hero-container {
+            display: flex; flex: 1; position: relative;
+            padding-left: 80px; padding-top: 40px; align-items: flex-start; z-index: 10;
+        }
+
+        .hero-content {
+            flex: 0 0 50%; max-width: 800px; z-index: 10; position: relative;
+            animation: contentFloat 7s ease-in-out infinite alternate;
+        }
+        @keyframes contentFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+
+        .hero-title {
+            font-size: 6.5rem; font-weight: 900; line-height: 1;
+            margin-bottom: 50px; text-transform: uppercase; letter-spacing: -1px;
+        }
+
+        .title-outline {
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.7);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-solid {
+            display: block;
+        }
+
+        /* The signature sliced letter effect from the reference */
+        .slice-effect {
+            position: relative; display: inline-block;
+        }
+        .slice-effect::after {
+            content: ''; position: absolute;
+            width: 120%; height: 6px; background: #0b1016; /* matching body bg */
+            top: 48%; left: -10%; transform: rotate(-4deg);
+        }
+
+        .cta-row {
+            display: flex; align-items: center; gap: 40px; margin-bottom: 70px;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(90deg, #b833ff, #ff3c8d);
+            color: #fff; text-decoration: none; font-weight: 800;
+            padding: 18px 45px; border-radius: 40px; font-size: 0.85rem; letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(184, 51, 255, 0.2); transition: transform 0.3s;
+            text-transform: uppercase;
+        }
+        .read-more-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(184, 51, 255, 0.4); }
+
+        .cta-text {
+            color: #8b9fb1; font-size: 0.85rem; max-width: 200px; line-height: 1.6; font-weight: 600;
+        }
+        .cta-text span { color: #b833ff; }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex; gap: 70px; font-weight: 800;
+        }
+        .stat-item { display: flex; flex-direction: column; gap: 8px; }
+        .stat-num { font-size: 1.8rem; letter-spacing: -1px; }
+        .stat-label { font-size: 0.7rem; color: #5a6b7c; letter-spacing: 1px; text-transform: uppercase; }
+
+        .pink-stat .stat-num { color: #ff3c8d; }
+
+        /* Huge 3D Character */
+        /* To perfectly match the layout, the character dominates the right side and overlaps the bottom bar slightly */
+        .hero-image {
+            position: absolute; right: 0; bottom: -80px;
+            height: 110%; width: auto; max-width: 60%;
+            object-fit: contain; object-position: bottom right;
+            z-index: 8; pointer-events: none;
+            filter: drop-shadow(-20px 20px 30px rgba(0,0,0,0.8));
+            animation: floatHero 5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes floatHero {
+            0% { transform: translateY(30px) rotate(1deg) scale(1); }
+            100% { transform: translateY(-30px) rotate(-1deg) scale(1.03); }
+        }
+
+        /* Bottom Logos Strip */
+        .logos-strip {
+            position: absolute; bottom: 0; width: 100%; height: 80px;
+            background: #020305; display: flex; justify-content: flex-start; align-items: center; gap: 80px;
+            z-index: 20; border-top: 1px solid rgba(255,255,255,0.03);
+            padding-left: 80px;
+        }
+        .logos-strip span {
+            color: #3a4b5c; font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; transition: color 0.3s;
+            opacity: 0.5;
+        }
+        .logos-strip span:hover { color: #fff; opacity: 1; }
+        
+        /* Orbitron specifically for one logo to match the "DOTA 2" look */
+        .orbitron-logo { font-family: 'Orbitron', sans-serif !important; }
+
+    </style>
+</head>
+    <div class="bg-beams" id="beams"></div>
+    <div class="particles-container" id="particles"></div>
+
+    <nav class="navbar">
+        <div class="logo">BRAWL.AI</div>
+        <div class="nav-links">
+            <a href="#">HOME</a>
+            <a href="#">TOP BOTS ˅</a>
+            <a href="#">HOW TO START</a>
+            <a href="#">F&Q</a>
+            <a href="#">MORE ˅</a>
+        </div>
+        <a href="login.html" class="create-btn">CREATE ACCOUNT →</a>
+    </nav>
+
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="title-solid">ONLY THE</span>
+                <span class="title-outline">SMA<span class="slice-effect">R</span>TEST</span><br>
+                <span class="title-solid">SURVIVE !</span>
+            </h1>
+
+            <div class="cta-row">
+                <a href="login.html" class="read-more-btn">ENTER ARENA →</a>
+                <div class="cta-text">
+                    Top 20 neural networks in<br>our selection for you<br>
+                    <span>Collection for 2026</span>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="stat-num">100 M+</span>
+                    <span class="stat-label">PILOTS HERE</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">550 K+</span>
+                    <span class="stat-label">MATCHES 4U</span>
+                </div>
+                <div class="stat-item pink-stat">
+                    <span class="stat-num">150 K</span>
+                    <span class="stat-label">ONLINE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- The massive 3D Cyber character mapping the Fortnite Raven reference -->
+        <img src="menxo_hero.png" alt="Cyber Character" class="hero-image">
+
+    </div>
+
+    <!-- Bottom Strip Mapping the games strip in reference -->
+    <div class="logos-strip">
+        <span class="orbitron-logo">MATRIX 9</span>
+        <span>NEURAL NET</span>
+        <span>VALORANT</span>
+        <span>TENSOR</span>
+        <span>APEX</span>
+    </div>
+
+    <!-- Re-inject the global audio system -->
+    <script src="audio.js"></script>
+    <script>
+        // Generate dynamic background elements
+        const beamsContainer = document.getElementById('beams');
+        for (let i = 0; i < 15; i++) {
+            const beam = document.createElement('div');
+            beam.className = 'beam';
+            beam.style.left = Math.random() * 100 + 'vw';
+            beam.style.animationDelay = Math.random() * 15 + 's';
+            beam.style.opacity = Math.random() * 0.3;
+            beamsContainer.appendChild(beam);
+        }
+
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 3 + 1;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.top = Math.random() * 100 + 'vh';
+            p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            p.style.animationDelay = Math.random() * 10 + 's';
+            p.style.background = Math.random() > 0.5 ? '#b833ff' : '#fff';
+            particlesContainer.appendChild(p);
+        }
+    </script>
+</body>
+</html>

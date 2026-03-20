@@ -1,0 +1,52 @@
+[
+  {
+    "level": 1,
+    "title": "Sum of Two Numbers",
+    "description": "Write a function named 'add' that takes two parameters (a, b) and returns their sum.",
+    "testCases": [
+      { "input": "add(2, 3)", "expected": 5 },
+      { "input": "add(-1, 5)", "expected": 4 }
+    ],
+    "xpReward": 100
+  },
+  {
+    "level": 2,
+    "title": "Is Even",
+    "description": "Write a function named 'isEven' that takes one parameter (n) and returns true if it is even, false otherwise.",
+    "testCases": [
+      { "input": "isEven(4)", "expected": true },
+      { "input": "isEven(7)", "expected": false }
+    ],
+    "xpReward": 200
+  },
+  {
+    "level": 3,
+    "title": "Max in Array",
+    "description": "Write a function named 'max' that takes an array of numbers and returns the largest number.",
+    "testCases": [
+      { "input": "max([1, 5, 3, 9, 2])", "expected": 9 },
+      { "input": "max([-10, -5, -20])", "expected": -5 }
+    ],
+    "xpReward": 300
+  },
+  {
+    "level": 4,
+    "title": "Factorial",
+    "description": "Write a function named 'factorial' that takes a positive integer n and returns n! (n factorial).",
+    "testCases": [
+      { "input": "factorial(5)", "expected": 120 },
+      { "input": "factorial(0)", "expected": 1 }
+    ],
+    "xpReward": 400
+  },
+  {
+    "level": 5,
+    "title": "Anagram Check",
+    "description": "Write a function named 'areAnagrams' that takes two strings and returns true if they are anagrams, false otherwise.",
+    "testCases": [
+      { "input": "areAnagrams('listen', 'silent')", "expected": true },
+      { "input": "areAnagrams('hello', 'world')", "expected": false }
+    ],
+    "xpReward": 500
+  }
+]

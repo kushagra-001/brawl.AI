@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BotBrawl - Login</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="battle-canvas"></canvas>
+
+  <div class="arena-container">
+
+    <div class="login-box">
+
+      <h1>BotBrawl</h1>
+      <p>Enter the Battle Zone</p>
+
+      <form>
+        <input type="text" placeholder="Player ID">
+        <input type="password" placeholder="Access Key">
+        <button type="submit">ENTER ARENA</button>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+<!-- ================= LOBBY SCREEN ================= -->
+<div class="lobby-container">
+
+  <!-- TOP BAR -->
+  <header class="lobby-header">
+    <h2 class="lobby-logo">BotBrawl</h2>
+    <div class="player-info">
+      <span>Player:</span>
+      <strong>Player001</strong>
+    </div>
+  </header>
+
+  <!-- MAIN LOBBY -->
+  <div class="lobby-main">
+
+    <!-- LEFT PANEL -->
+    <aside class="lobby-sidebar">
+      <h3>Your Stats</h3>
+      <p>Rank: Bronze</p>
+      <p>Matches: 12</p>
+      <p>Wins: 5</p>
+    </aside>
+
+    <!-- CENTER ACTIONS -->
+    <section class="lobby-actions">
+      <button>🚀 Deploy Bot</button>
+      <button>⚔️ Enter Arena</button>
+      <button>🏆 Leaderboard</button>
+    </section>
+
+  </div>
+</div>
+
+</html>
