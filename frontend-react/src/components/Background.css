@@ -6,7 +6,42 @@
   overflow: hidden;
 }
 
-/* 📺 SYSTEM CONTROLS 📺 */
+/* 📺 TOP SYSTEM BAR 📺 */
+.system-top-right {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  gap: 1px;
+  z-index: 3000;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.sys-ctrl {
+  background: transparent;
+  width: 45px; height: 35px;
+  display: flex; align-items: center; justify-content: center;
+  color: #8b9fb1;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sys-ctrl:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sys-ctrl.close:hover {
+  background: #ff0040;
+  color: #fff;
+}
+
+/* 📺 BOTTOM NAVIGATION HUD 📺 */
 .fixed-controls {
   position: fixed;
   bottom: 30px;

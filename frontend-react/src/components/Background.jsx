@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Maximize, Minimize, ArrowLeft } from 'lucide-react';
+import { Maximize, Minimize, ArrowLeft, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './Background.css';
 
@@ -11,13 +11,21 @@ const Background = ({ children }) => {
     const doc = window.document;
     const docEl = doc.documentElement;
 
-    const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-    const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+    const requestFullScreen = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+    const cancelFullScreen = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
 
-    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-      requestFullScreen.call(docEl);
+    if (!doc.fullscreenElement && !doc.webkitFullscreenElement && !doc.mozFullScreenElement && !doc.msFullscreenElement) {
+      console.log("INITIALIZING FULLSCREEN PROTOCOL...");
+      if (requestFullScreen) {
+        requestFullScreen.call(docEl);
+      } else {
+        console.warn("FULLSCREEN API NOT SUPPORTED ON THIS BROWSER.");
+      }
     } else {
-      cancelFullScreen.call(doc);
+      console.log("EXITING FULLSCREEN...");
+      if (cancelFullScreen) {
+        cancelFullScreen.call(doc);
+      }
     }
   };
 
@@ -53,20 +61,29 @@ const Background = ({ children }) => {
 
   return (
     <div className="bg-container terminal-mode">
-      {/* 📺 SYSTEM CONTROLS 📺 */}
+      {/* 📺 TOP SYSTEM BAR: PROFESSIONAL CLIENT CONTROLS 📺 */}
+      <div className="system-top-right">
+        <button className="sys-ctrl" onClick={() => setIsFullscreen(false)} title="Minimize Protocol">
+          <Minimize size={16} />
+        </button>
+        <button className="sys-ctrl" onClick={toggleFullscreen} title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Link"}>
+          {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
+        </button>
+        <button className="sys-ctrl close" onClick={() => navigate('/')} title="Close Terminal">
+           <X size={16} />
+        </button>
+      </div>
+
+      {/* 📺 BOTTOM NAVIGATION HUD 📺 */}
       <div className="fixed-controls">
-        <button className="system-btn return-top" onClick={() => window.scrollTo({top:0, behavior:'smooth'})} title="Return to Top">
+        <button className="system-btn return-top" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
           <ArrowLeft size={18} style={{ transform: 'rotate(90deg)' }} />
-          <span>RETURN TOP</span>
+          <span>RETURN REBOOT</span>
         </button>
 
-        <button className="system-btn return-back" onClick={() => navigate(-1)} title="Return Back">
+        <button className="system-btn return-back" onClick={() => navigate(-1)}>
           <ArrowLeft size={18} />
-          <span>SYSTEM BACK</span>
-        </button>
-
-        <button className="system-btn-icon scale" onClick={toggleFullscreen} title={isFullscreen ? "Minimize" : "Full Screen"}>
-          {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+          <span>GRID BACK</span>
         </button>
       </div>
 
