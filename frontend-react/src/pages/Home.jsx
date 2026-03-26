@@ -1,0 +1,275 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Sword, Cpu, Target, Globe, Info, Send, ChevronRight, Activity, Zap, Shield } from 'lucide-react';
+import Background from '../components/Background';
+import Navbar from '../components/Navbar';
+import './Home.css';
+
+const Home = () => {
+  return (
+    <div className="landing-wrapper">
+      <Background>
+        <Navbar />
+        
+        {/* 🏆 EPIC HERO: CINEMATIC BATTLE ARENA 🏆 */}
+        <section className="hero-section premium" id="home">
+          <div className="container-hero">
+            <motion.div 
+              className="hero-text-content"
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div 
+                className="tagline-badge"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Zap size={14} className="accent-magenta" />
+                <span>NEURAL ARENA PILOT</span>
+              </motion.div>
+
+              <motion.h1 
+                className="hero-display font-montserrat"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                Only The <span className="accent-magenta text-glow">SMARTEST</span><br />
+                Survive !
+              </motion.h1>
+
+              <motion.p 
+                className="hero-lead"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                The first decentralized AI fighting arena where combat is code, 
+                and logic is the ultimate weapon. Dominate the global grid.
+              </motion.p>
+
+              <motion.div 
+                className="hero-actions"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              >
+                <Link to="/login" className="btn-primary-glow">
+                  <span>ENTER ARENA</span>
+                  <ChevronRight size={18} />
+                </Link>
+                <a href="#about" className="btn-secondary-outline">
+                  MISSION INTEL
+                </a>
+              </motion.div>
+            </motion.div>
+
+            {/* Cinematic Clashing Art */}
+            <motion.div 
+              className="hero-art-main"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            >
+              <div className="hero-art-clash">
+                <img src="/assets/red_left.png" alt="Male Pilot" className="clash-image male" style={{ position: 'absolute', left: '-10%', width: '70%', zIndex: 2 }} />
+                <img src="/assets/red_right.png" alt="Female Pilot" className="clash-image female" style={{ position: 'absolute', right: '-10%', width: '70%', zIndex: 1 }} />
+                <div className="clash-glow" />
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="stat-bar-premium">
+             <div className="p-stat"><span className="p-label">TOTAL MATCHES</span><span className="p-val">1.28M</span><Activity size={12} className="accent-magenta" /></div>
+             <div className="v-divider" />
+             <div className="p-stat"><span className="p-label">SYSTEM RANK</span><span className="p-val">CORE-01</span><Shield size={12} className="accent-cyan" /></div>
+             <div className="v-divider" />
+             <div className="p-stat"><span className="p-label">ACTIVE PILOTS</span><span className="p-val">15,842</span><div className="online-indicator" /></div>
+          </div>
+        </section>
+
+        {/* 🎮 GAME MODES SECTION 🎮 */}
+        <section className="tech-section" id="modes">
+          <div className="container-main">
+            <div className="section-head center">
+               <span className="section-label">COMBAT INTERFACE</span>
+               <h2>LEVEL UP YOUR <span className="accent-magenta text-glow">SKILLS</span></h2>
+            </div>
+            <div className="features-grid-premium">
+              {[
+                { title: "1v1 Duel", desc: "Face off against elite AI or human pilots in high-stakes logic combat.", icon: <Sword size={32}/>, color: "magenta" },
+                { title: "AI Training", desc: "Refine your algorithms in a sandbox environment with real-time feedback.", icon: <Target size={32}/>, color: "cyan" },
+                { title: "Ranked Match", desc: "Climb the global grid and earn seasonal rewards for your logic mastery.", icon: <Cpu size={32}/>, color: "white" },
+                { title: "Casual Mode", desc: "Experiment with new tactics in a low-pressure environment.", icon: <Zap size={14}/>, color: "cyan" }
+              ].map((mode, index) => (
+                <motion.div key={index} className="f-card glass-panel" whileHover={{ y: -10, scale: 1.02 }}>
+                  <div className={`f-icon-box ${mode.color}`}>{mode.icon}</div>
+                  <h4>{mode.title}</h4>
+                  <p>{mode.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 📊 PLAYER STATS SECTION 📊 */}
+        <section className="stats-dashboard">
+          <div className="container-main">
+            <div className="stats-strip glass-panel">
+              {[
+                { label: "Matches Played", val: "1.2M+" },
+                { label: "Win Rate", val: "94.2%" },
+                { label: "Elite Rank", val: "GRANDMASTER" },
+                { label: "XP Level", val: "MAX" }
+              ].map((stat, i) => (
+                <div key={i} className="stat-unit">
+                  <span className="p-label">{stat.label}</span>
+                  <span className="p-val accent-cyan">{stat.val}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 🧠 AI CORE FEATURES 🧠 */}
+        <section className="tech-spotlight">
+          <div className="container-main side-by-side">
+            <div className="tech-visual">
+               <img src="/assets/neural_brain.png" alt="Neural Brain" className="brain-img" />
+               <div className="visual-pulse" />
+            </div>
+            <div className="tech-copy">
+               <span className="section-label">AI ARCHITECTURE</span>
+               <h2>THE NEURAL <span className="text-glow">ADVANTAGE</span></h2>
+               <p>Brawl.AI isn't just a game; it's a living, breathing neural ecosystem built for the next generation of digital combat.</p>
+               
+               <div className="features-simple-grid">
+                 {[
+                   "Smart AI Opponents", "Adaptive Gameplay", 
+                   "Real-time Strategy Analysis", "Skill-based Matchmaking"
+                 ].map((feat, i) => (
+                   <div key={i} className="feat-item">
+                     <div className="dot" />
+                     <span>{feat}</span>
+                   </div>
+                 ))}
+               </div>
+               <Link to="/login" className="btn-primary-glow">INITIALIZE PILOT</Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 🏆 ACHIEVEMENTS & REWARDS 🏆 */}
+        <section className="tech-section alt-bg">
+          <div className="container-main">
+            <div className="section-head center">
+               <span className="section-label">COLLECTABLES</span>
+               <h2>EARN YOUR <span className="accent-magenta">LEGACY</span></h2>
+            </div>
+            <div className="features-grid-premium">
+              {[
+                { title: "Daily Rewards", desc: "Log in every 24h to claim premium $CORE credits and skins." },
+                { title: "Unlockable Skins", desc: "Customize your AI pilot with elite cosmetic chassis upgrades." },
+                { title: "Win Streak Bonus", desc: "Stacked XP multipliers for consecutive logic dominance." },
+                { title: "Master Badges", desc: "Unique identity markers for the top 1% of pilots." }
+              ].map((ach, i) => (
+                <div key={i} className="f-card achievement-card">
+                  <div className="glow-icon" />
+                  <h4>{ach.title}</h4>
+                  <p>{ach.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ⚡ WHY CHOOSE BRAWL.AI ⚡ */}
+        <section className="preview-section">
+          <div className="container-main side-by-side">
+            <div className="tech-copy">
+               <span className="section-label">SYSTEM CORE</span>
+               <h2>WHY <span className="accent-magenta">BRAWL.AI?</span></h2>
+               <div className="why-grid">
+                 {[
+                   { t: "Fast Gameplay", d: "Zero-latency neural processing for instant combat feedback." },
+                   { t: "Fair Matchmaking", d: "ELO-based logic tiers ensure balanced competition." },
+                   { t: "Clean UI", d: "High-end aesthetic inspired by futuristic terminal interfaces." },
+                   { t: "AI-Powered", d: "Millions of battle simulations every second for true variety." }
+                 ].map((item, i) => (
+                    <div key={i} className="why-item">
+                      <h5>{item.t}</h5>
+                      <p>{item.d}</p>
+                    </div>
+                 ))}
+               </div>
+            </div>
+            <div className="tech-visual">
+               <img src="/assets/arena_wide.png" alt="Arena Wide" className="preview-img-frame" />
+            </div>
+          </div>
+        </section>
+
+        {/* 🌐 COMMUNITY & UPCOMING 🌐 */}
+        <section className="dual-section tech-section">
+          <div className="container-main">
+            <div className="dual-grid">
+              <div className="community-box glass-panel p-40">
+                <span className="section-label">SOCIAL NODE</span>
+                <h2>COMMUNITY <span className="text-glow">HUB</span></h2>
+                <div className="info-list">
+                  {[
+                    "842k+ Active Players", "Real-time Global Rankings", "Live Matches Preview"
+                  ].map((text, i) => (
+                    <div key={i} className="info-item-simple"><Globe size={16} className="accent-cyan"/> {text}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="upcoming-box glass-panel p-40">
+                <span className="section-label">ROADMAP // 2026</span>
+                <h2>UPCOMING <span className="accent-magenta">FEATURES</span></h2>
+                <div className="info-list horizontal">
+                  {["Voice Chat", "Team Battles", "Tournament Mode", "Mobile Version"].map((feat, i) => (
+                    <div key={i} className="upcoming-tag">{feat}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 🌑 CINEMATIC FOOTER 🌑 */}
+        <footer className="footer-premium">
+           <div className="footer-main">
+              <div className="f-branding">
+                 <div className="logo-f font-montserrat">BR<span className="accent-magenta">AWL</span>.AI</div>
+                 <p className="f-tagline">DECENTRALIZED NEURAL ARENA</p>
+              </div>
+              <div className="f-links-grid">
+                 <div className="f-col">
+                   <h6>GRID</h6>
+                   <Link to="/">ARENA</Link><Link to="/">RANKINGS</Link><Link to="/">MODES</Link>
+                 </div>
+                 <div className="f-col">
+                   <h6>INTELLIGENCE</h6>
+                   <Link to="/">SYSTEMS</Link><Link to="/">DOCUMENTATION</Link><Link to="/">SUPPORT</Link>
+                 </div>
+                 <div className="f-col social">
+                   <h6>NETWORK</h6>
+                   <div className="social-row"><Globe size={18}/><Info size={18}/><Send size={18}/></div>
+                 </div>
+              </div>
+           </div>
+           <div className="footer-base">
+              <p>© 2026 BRAWL.AI - SECURE SYSTEM ENDPOINT</p>
+           </div>
+        </footer>
+      </Background>
+    </div>
+  );
+};
+
+export default Home;
+

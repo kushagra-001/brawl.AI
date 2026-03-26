@@ -1,0 +1,275 @@
+.battle-prep-container {
+  min-height: 100vh;
+  background-color: #0b1016;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #fff;
+}
+
+.battle-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.back-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.back-btn:hover {
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+.battle-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--primary-glow);
+}
+
+.user-tag {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.battle-main {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+  flex: 1;
+}
+
+.battle-hud-panel {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.fighter-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.hp-track {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.hp-bar {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.hp-bar.player { background: linear-gradient(90deg, #00ff73, #00cc55); box-shadow: 0 0 10px #00ff73; }
+.hp-bar.ai { background: linear-gradient(90deg, #ff5500, #ff0033); box-shadow: 0 0 10px #ff0033; }
+
+.vs-tag {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--text-muted);
+}
+
+.challenge-box h2 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.challenge-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.battle-msg {
+  margin-top: auto;
+  padding: 15px;
+  background: rgba(0, 255, 115, 0.1);
+  border-left: 4px solid #00ff73;
+  color: #00ff73;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.battle-msg.danger {
+  background: rgba(255, 77, 77, 0.1);
+  border-left-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tab.active {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-select {
+  background: #0b1016;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  outline: none;
+}
+
+.editor-container {
+  flex: 1;
+  display: flex;
+  background: #0d1117;
+}
+
+.line-numbers {
+  padding: 16px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: monospace;
+  text-align: right;
+  min-width: 40px;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.code-textarea {
+  flex: 1;
+  padding: 16px;
+  background: transparent;
+  border: none;
+  color: #e6edf3;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+}
+
+.editor-footer {
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.run-btn, .attack-btn {
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+
+.run-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.run-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #fff;
+}
+
+.attack-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.attack-btn:hover {
+  background: #b833ff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px var(--primary-glow);
+}
+
+.attack-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.console-panel {
+  padding: 24px;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.console-header {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.console-content {
+  flex: 1;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+}

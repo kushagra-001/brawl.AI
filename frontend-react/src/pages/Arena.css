@@ -1,0 +1,162 @@
+.arena-screen {
+  min-height: 100vh;
+  background: #06030e;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.arena-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 40px;
+  background: rgba(6, 3, 14, 0.9);
+  border-bottom: 2px solid rgba(162, 56, 255, 0.2);
+}
+
+.fighter-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fighter-hud.ai { align-items: flex-end; }
+
+.f-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--primary);
+}
+
+.fighter-hud.ai .f-name { color: var(--secondary); }
+
+.hp-track {
+  width: 100%;
+  max-width: 300px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hp-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff73, #00cc55);
+  box-shadow: 0 0 10px #00ff73;
+  transition: width 0.3s ease;
+}
+
+.hp-bar.ai { background: linear-gradient(90deg, #ff5500, #ff0033); box-shadow: 0 0 10px #ff0033; }
+
+.arena-center { text-align: center; }
+.timer { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 20px var(--primary-glow); }
+.round-info { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+.canvas-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+#battle-arena {
+  box-shadow: 0 0 100px rgba(162, 56, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #000;
+}
+
+.arena-footer {
+  padding: 15px 40px;
+  background: rgba(6, 3, 14, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls-hint {
+  display: flex;
+  gap: 20px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.controls-hint kbd {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 5px;
+  font-family: monospace;
+}
+
+.exit-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #ff4d4d;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Modal result */
+.overlay {
+  position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center;
+}
+.overlay.show { display: flex; }
+
+.overlay-box {
+  background: #0e101f; border-radius: 24px; padding: 60px; text-align: center; max-width: 500px;
+  border: 1px solid var(--primary); box-shadow: 0 0 50px var(--primary-glow);
+}
+
+.result-icon { font-size: 4rem; margin-bottom: 20px; }
+.result-big { font-size: 3.5rem; font-weight: 900; margin-bottom: 10px; letter-spacing: 2px; }
+.result-big.victory { color: #00ff73; text-shadow: 0 0 40px #00ff73; }
+.result-big.defeat { color: #ff1a1a; text-shadow: 0 0 40px #ff1a1a; }
+
+.result-sub { color: var(--text-secondary); margin-bottom: 30px; font-size: 1rem; }
+
+.ob-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
+.ob-btn.pri { background: var(--primary); color: #fff; box-shadow: 0 0 30px var(--primary-glow); }
+.ob-btn.pri:hover { background: #b833ff; }
+
+/* ──────────────────────────────────────────────────────────
+   ARENA RESPONSIVENESS
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .arena-header { padding: 15px 20px; }
+  .f-name { font-size: 0.75rem; }
+  .timer { font-size: 1.5rem; }
+  .hp-track { max-width: 150px; }
+  .canvas-wrapper { padding: 10px; }
+  #battle-arena { width: 100% !important; height: auto !important; }
+}
+
+@media (max-width: 768px) {
+  .arena-header { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .arena-center { grid-column: span 2; order: -1; margin-bottom: 10px; }
+  .fighter-hud { align-items: flex-start !important; }
+  .controls-hint { display: none; }
+  .exit-btn { width: 100%; justify-content: center; }
+  .overlay-box { padding: 30px; }
+  .result-big { font-size: 2.5rem; }
+}
+
+@media (max-width: 480px) {
+  .f-name { font-size: 0.65rem; }
+  .timer { font-size: 1.2rem; }
+  .hp-track { height: 12px; }
+}

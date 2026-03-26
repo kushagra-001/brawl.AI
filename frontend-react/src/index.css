@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;600;800;900&family=Orbitron:wght@700&display=swap');
+
+:root {
+  --bg-dark-900: #0b1016;
+  --bg-dark-800: #0e101f;
+  --bg-dark-700: #141728;
+  --primary: #a238ff;
+  --primary-glow: rgba(162, 56, 255, 0.4);
+  --secondary: #ff3c8d;
+  --secondary-glow: rgba(255, 60, 141, 0.4);
+  --text-primary: #ffffff;
+  --text-secondary: #8b9fb1;
+  --text-muted: #4a5a6a;
+  --card-border: rgba(100, 60, 200, 0.3);
+  --accent-purple: #b833ff;
+  --accent-blue: #0084ff;
+  
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-dark-900);
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Glassmorphism effects */
+.glass-panel {
+  background: rgba(20, 23, 40, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2d45;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Interactive elements */
+button {
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+input {
+  font-family: 'Inter', sans-serif;
+}
