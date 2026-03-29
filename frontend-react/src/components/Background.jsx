@@ -61,18 +61,7 @@ const Background = ({ children }) => {
 
   return (
     <div className="bg-container terminal-mode">
-      {/* 📺 TOP SYSTEM BAR: PROFESSIONAL CLIENT CONTROLS 📺 */}
-      <div className="system-top-right">
-        <button className="sys-ctrl" onClick={() => setIsFullscreen(false)} title="Minimize Protocol">
-          <Minimize size={16} />
-        </button>
-        <button className="sys-ctrl" onClick={toggleFullscreen} title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Link"}>
-          {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
-        </button>
-        <button className="sys-ctrl close" onClick={() => navigate('/')} title="Close Terminal">
-           <X size={16} />
-        </button>
-      </div>
+      {/* System Bar removed from here */}
 
       {/* 📺 BOTTOM NAVIGATION HUD 📺 */}
       <div className="fixed-controls">
@@ -81,10 +70,22 @@ const Background = ({ children }) => {
           <span>RETURN REBOOT</span>
         </button>
 
-        <button className="system-btn return-back" onClick={() => navigate(-1)}>
-          <ArrowLeft size={18} />
-          <span>GRID BACK</span>
-        </button>
+        <div className="hud-right-group">
+          {/* 📺 SYSTEM CONTROLS MOVED HERE 📺 */}
+          <div className="system-bottom-right">
+            <button className="sys-ctrl" onClick={() => setIsFullscreen(false)} title="Minimize Protocol">
+              <Minimize size={14} />
+            </button>
+            <button className="sys-ctrl" onClick={toggleFullscreen} title={isFullscreen ? "Exit Fullscreen" : "Fullscreen Link"}>
+              {isFullscreen ? <Minimize size={14} /> : <Maximize size={14} />}
+            </button>
+          </div>
+
+          <button className="system-btn return-back" onClick={() => navigate(-1)}>
+            <ArrowLeft size={18} />
+            <span>GRID BACK</span>
+          </button>
+        </div>
       </div>
 
       <div className="bg-content">

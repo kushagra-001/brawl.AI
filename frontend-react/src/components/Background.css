@@ -6,19 +6,21 @@
   overflow: hidden;
 }
 
-/* 📺 TOP SYSTEM BAR 📺 */
-.system-top-right {
-  position: fixed;
-  top: 15px;
-  right: 15px;
+.hud-right-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.system-bottom-right {
   display: flex;
   gap: 1px;
-  z-index: 3000;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   border-radius: 4px;
   overflow: hidden;
+  height: 35px;
 }
 
 .sys-ctrl {
