@@ -84,8 +84,13 @@ const Home = () => {
               style={{ zIndex: 5 }}
             >
               <div className="hero-art-clash">
-                <img src={`${import.meta.env.BASE_URL}assets/red_left.png`} alt="Male Pilot" className="clash-image male" style={{ position: 'absolute', left: '-10%', width: '70%', zIndex: 2 }} />
-                <img src={`${import.meta.env.BASE_URL}assets/red_right.png`} alt="Female Pilot" className="clash-image female" style={{ position: 'absolute', right: '-10%', width: '70%', zIndex: 1 }} />
+                {/* 🌑 NEW: CINEMATIC MOON BACKGROUND 🌑 */}
+                <img src={`${import.meta.env.BASE_URL}assets/hero_moon_bg.png`} alt="Moon Background" className="hero-moon-back" />
+                
+                {/* ⚔️ NEW CHARACTERS ⚔️ */}
+                <img src={`${import.meta.env.BASE_URL}assets/hero_left_new.png`} alt="White-Hair Pilot" className="clash-image pilot-left" />
+                <img src={`${import.meta.env.BASE_URL}assets/hero_right_new.png`} alt="Tech-Demon" className="clash-image demon-right" />
+                
                 <div className="clash-glow" />
               </div>
             </motion.div>
