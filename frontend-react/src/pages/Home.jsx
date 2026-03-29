@@ -69,9 +69,7 @@ const Home = () => {
                   <span>ENTER ARENA</span>
                   <ChevronRight size={18} />
                 </Link>
-                <a href="#about" className="btn-secondary-outline">
-                  MISSION INTEL
-                </a>
+
               </motion.div>
             </motion.div>
 
