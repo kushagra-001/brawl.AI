@@ -179,16 +179,37 @@ const Home = () => {
             </div>
             <div className="features-grid-premium">
               {[
-                { title: "Daily Rewards", desc: "Log in every 24h to claim premium $CORE credits and skins." },
-                { title: "Unlockable Skins", desc: "Customize your AI pilot with elite cosmetic chassis upgrades." },
-                { title: "Win Streak Bonus", desc: "Stacked XP multipliers for consecutive logic dominance." },
-                { title: "Master Badges", desc: "Unique identity markers for the top 1% of pilots." }
+                { title: "Daily Rewards", desc: "Log in every 24h to claim premium $CORE credits and skins.", progress: 75, xp: "2,400 XP", reward: "🎁", tier: "GOLD" },
+                { title: "Unlockable Skins", desc: "Customize your AI pilot with elite cosmetic chassis upgrades.", progress: 45, xp: "1,800 XP", reward: "🎨", tier: "SILVER" },
+                { title: "Win Streak Bonus", desc: "Stacked XP multipliers for consecutive logic dominance.", progress: 90, xp: "5,200 XP", reward: "🔥", tier: "PLATINUM" },
+                { title: "Master Badges", desc: "Unique identity markers for the top 1% of pilots.", progress: 30, xp: "8,000 XP", reward: "🏆", tier: "DIAMOND" }
               ].map((ach, i) => (
-                <div key={i} className="f-card achievement-card">
-                  <div className="glow-icon" />
+                <motion.div 
+                  key={i} 
+                  className="f-card achievement-card-v2"
+                  whileHover={{ y: -8, scale: 1.03 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                >
+                  <div className="ach-header">
+                    <div className="ach-reward-icon">{ach.reward}</div>
+                    <span className={`ach-tier tier-${ach.tier.toLowerCase()}`}>{ach.tier}</span>
+                  </div>
                   <h4>{ach.title}</h4>
                   <p>{ach.desc}</p>
-                </div>
+                  <div className="ach-progress-section">
+                    <div className="ach-progress-info">
+                      <span className="ach-xp">{ach.xp}</span>
+                      <span className="ach-percent">{ach.progress}%</span>
+                    </div>
+                    <div className="ach-progress-track">
+                      <div className="ach-progress-fill" style={{ width: `${ach.progress}%` }} />
+                      <div className="ach-progress-glow" style={{ left: `${ach.progress}%` }} />
+                    </div>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
