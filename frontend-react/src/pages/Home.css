@@ -160,9 +160,9 @@
   align-items: center;
 }
 
-.hero-center-art {
-  width: 142% !important;
-  max-width: 1230px !important;
+.hero-center-art-v2 {
+  width: 135% !important;
+  max-width: 1100px !important;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 0 50px var(--primary-glow));
