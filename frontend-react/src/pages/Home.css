@@ -309,10 +309,14 @@
 
 /* 🤖 FEATURES 🤖 */
 .tech-section { padding: 60px 0; }
-.features-grid-premium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.features-grid-premium { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px; 
+}
 
 .f-card {
-  padding: 40px;
+  padding: 24px;
   background: var(--glass);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
@@ -327,9 +331,9 @@
 }
 
 .f-icon-box {
-  width: 64px; height: 64px;
+  width: 54px; height: 54px;
   display: flex; align-items: center; justify-content: center;
-  border-radius: 8px; margin-bottom: 25px;
+  border-radius: 8px; margin-bottom: 20px;
 }
 
 .f-icon-box.magenta { background: rgba(255, 60, 141, 0.1); color: var(--primary); }

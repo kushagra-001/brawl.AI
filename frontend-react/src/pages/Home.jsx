@@ -111,7 +111,9 @@ const Home = () => {
                 { title: "1v1 Duel", desc: "Face off against elite AI or human pilots in high-stakes logic combat.", icon: <Sword size={32}/>, color: "magenta" },
                 { title: "AI Training", desc: "Refine your algorithms in a sandbox environment with real-time feedback.", icon: <Target size={32}/>, color: "cyan" },
                 { title: "Ranked Match", desc: "Climb the global grid and earn seasonal rewards for your logic mastery.", icon: <Cpu size={32}/>, color: "white" },
-                { title: "Casual Mode", desc: "Experiment with new tactics in a low-pressure environment.", icon: <Zap size={14}/>, color: "cyan" }
+                { title: "Casual Mode", desc: "Experiment with new tactics in a low-pressure environment.", icon: <Zap size={32}/>, color: "cyan" },
+                { title: "Daily Challenges", desc: "Complete daily neural puzzles to earn unique $CORE rewards and XP.", icon: <Zap size={32}/>, color: "magenta" },
+                { title: "Multiplayer", desc: "Large-scale node battles where multiple pilots clash for grid supremacy.", icon: <Globe size={32}/>, color: "white" }
               ].map((mode, index) => (
                 <motion.div key={index} className="f-card glass-panel" whileHover={{ y: -10, scale: 1.02 }}>
                   <div className={`f-icon-box ${mode.color}`}>{mode.icon}</div>
