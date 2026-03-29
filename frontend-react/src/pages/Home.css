@@ -416,7 +416,7 @@
 .side-by-side { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
 
 .tech-visual { position: relative; display: flex; justify-content: center; }
-.squad-img {
+.squad-img-v2 {
   width: 550px;
   filter: drop-shadow(0 0 60px var(--primary-glow));
   border-radius: 12px;

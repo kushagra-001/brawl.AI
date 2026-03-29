@@ -148,7 +148,7 @@ const Home = () => {
         <section className="tech-spotlight">
           <div className="container-main side-by-side">
             <div className="tech-visual">
-               <img src={`${import.meta.env.BASE_URL}assets/hero_squad.png`} alt="Elite Squad" className="squad-img" />
+               <img src={`${import.meta.env.BASE_URL}assets/hero_squad.png?v=1.1`} alt="Elite Squad" className="squad-img-v2" />
                <div className="visual-pulse" />
             </div>
             <div className="tech-copy">
