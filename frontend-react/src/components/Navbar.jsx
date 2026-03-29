@@ -19,7 +19,7 @@ const Navbar = () => {
       </div>
 
       <div className="nav-actions">
-        <Link to="/login" className="create-btn">CREATE ACCOUNT →</Link>
+
         <button className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
