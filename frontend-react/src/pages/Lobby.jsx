@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, Trophy, Activity, Zap, Shield, Play } from 'lucide-react';
+import { LogOut, Trophy, Activity, Zap, Shield, Play, Crosshair, Users, Hexagon, Settings, Award } from 'lucide-react';
 import './Lobby.css';
 
 // Import avatars (Note: in a real app these might be dynamic URLs)
@@ -24,33 +24,39 @@ const Lobby = () => {
   const API_BASE = '/api';
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Parallel fetching
-        const [profRes, leadRes, nodeRes] = await Promise.all([
-          fetch(`${API_BASE}/user/profile/${user.username}`),
-          fetch(`${API_BASE}/leaderboard`),
-          fetch(`${API_BASE}/system/nodes`)
-        ]);
+    // Simulated fetching for frontend demonstration without backend
+    const fetchMockData = () => {
+      setProfile({
+        level: 12,
+        xp: 1450,
+        stats: { aiDefeated: 243, winRate: "72%", totalMatches: 337 },
+        matches: [
+          { result: 'VICTORY', opponent: 'NeuralBot_X', xpChange: 50 },
+          { result: 'DEFEAT', opponent: 'AlphaOmega', xpChange: 15 },
+          { result: 'VICTORY', opponent: 'CyberGrind', xpChange: 45 },
+        ]
+      });
 
-        const [profData, leadData, nodeData] = await Promise.all([
-          profRes.json(),
-          leadRes.json(),
-          nodeRes.json()
-        ]);
+      setLeaderboard([
+        { username: 'FakerAI', level: 99 },
+        { username: 'VoidWalker', level: 87 },
+        { username: 'NeonNinja', level: 82 },
+        { username: 'GlitchTrap', level: 75 },
+      ]);
 
-        setProfile(profData);
-        setLeaderboard(leadData);
-        setNodes(nodeData);
-      } catch (err) {
-        console.error("Error fetching lobby data:", err);
-        // Fallback or handle error
-      } finally {
-        setLoading(false);
-      }
+      setNodes([
+        { name: 'N-AMR-E1', status: 'ONLINE', ping: '12ms', color: '#00ff73' },
+        { name: 'EU-WST-X', status: 'ONLINE', ping: '34ms', color: '#00ff73' },
+        { name: 'AS-PAC-9', status: 'HEAVY', ping: '105ms', color: '#ffb800' },
+        { name: 'N-AMR-W2', status: 'OFFLINE', ping: 'ERR', color: '#ff4d4d' },
+      ]);
+
+      setLoading(false);
     };
 
-    if (user) fetchData();
+    if (user) {
+      fetchMockData();
+    }
   }, [user]);
 
   const getAvatar = () => {
@@ -77,127 +83,231 @@ const Lobby = () => {
 
   return (
     <div className="lobby-container">
-      {/* Background Glitter Effect (Simulated in CSS) */}
+      {/* Background Cyberpunk Elements */}
       <div className="glitter-overlay"></div>
-
+      <div className="cyber-grid-bg"></div>
+      
       {/* HEADER / USER PANEL */}
-      <header className="lobby-header glass-panel">
-        <div className="user-info">
-          <div className="avatar-preview" style={{ backgroundImage: `url(${getAvatar()})` }}></div>
-          <div className="user-details">
-            <h1 className="username font-montserrat">{user.username.toUpperCase()}</h1>
-            <div className="level-badge font-orbitron">LVL {profile?.level || 1}</div>
+      <header className="lobby-header glass-panel neo-border">
+        <div className="header-left">
+          <div className="brand-logo font-orbitron">
+            <Hexagon className="logo-icon" size={28} />
+            <span>BRAWL<span>.AI</span></span>
           </div>
+          
+          <nav className="main-nav font-montserrat">
+            <button className="nav-item active"><Users size={16}/> LOBBY</button>
+            <button className="nav-item"><Shield size={16}/> ARMORY</button>
+            <button className="nav-item"><Award size={16}/> MISSIONS</button>
+          </nav>
         </div>
 
-        <div className="xp-container">
-          <div className="xp-header">
-            <span>EXPERIENCE PROGRESSION</span>
-            <span>{currentXP} / {maxXP} XP</span>
+        <div className="header-center xp-container">
+          <div className="xp-details font-montserrat">
+            <span className="lvl-badge font-orbitron">LVL {profile?.level || 1}</span>
+            <span className="xp-text">{currentXP} / {maxXP} XP</span>
           </div>
           <div className="xp-track">
-            <div className="xp-bar" style={{ width: `${xpPercentage}%` }}></div>
+            <div className="xp-bar" style={{ width: `${xpPercentage}%` }}>
+               <div className="xp-glow"></div>
+            </div>
           </div>
         </div>
 
-        <button className="logout-btn" onClick={logout}>
-          <LogOut size={20} />
-          <span>LOGOUT</span>
-        </button>
+        <div className="header-right user-info">
+          <div className="user-details font-montserrat">
+            <span className="user-title">ELITE PILOT</span>
+            <span className="username font-orbitron">{user.username.toUpperCase()}</span>
+          </div>
+          <div className="avatar-wrapper">
+            <div className="avatar-preview" style={{ backgroundImage: `url(${getAvatar()})` }}></div>
+            <div className="avatar-ring"></div>
+          </div>
+          
+          <button className="icon-btn settings-btn"><Settings size={20} /></button>
+          <button className="icon-btn logout-btn" onClick={logout} title="Disconnect">
+            <LogOut size={20} />
+          </button>
+        </div>
       </header>
 
       <main className="lobby-content">
-        {/* LEFT SECTION: Modes & Stats */}
-        <section className="modes-section">
-          <div className="mode-card ai-card glass-panel">
-            <div className="card-tag">PVE</div>
-            <div className="card-content">
-              <h2 className="font-montserrat">PLAYER VS AI</h2>
-              <p>Test your strategy against our neural networks.</p>
-              <button className="start-battle-btn font-orbitron" onClick={() => navigate('/battle')}>
-                <Play fill="white" size={18} /> START BATTLE
-              </button>
-            </div>
+        {/* LEFT SECTION: Modes & Features */}
+        <section className="central-hub">
+          <div className="section-title font-orbitron">
+            <h2>WARZONE SELECTOR</h2>
+            <div className="title-line"></div>
           </div>
 
-          <div className="modes-grid">
-            <div className="mode-card glass-panel locked">
-              <div className="card-tag">PVP</div>
-              <h3>ARENA 1V1</h3>
-              <p>Coming Soon</p>
-            </div>
-            <div className="mode-card glass-panel locked">
-              <div className="card-tag">ROYALE</div>
-              <h3>100 PLAYER BR</h3>
-              <p>Coming Soon</p>
-            </div>
-          </div>
-
-          <div className="stats-panel glass-panel">
-            <h3 className="font-montserrat"><Activity size={18} /> COMBAT STATS</h3>
-            <div className="stat-grid">
-              <div className="stat-box">
-                <span className="stat-label">AI DEFEATED</span>
-                <span className="stat-value">{profile?.stats?.aiDefeated || 0}</span>
+          <div className="primary-modes">
+            {/* Battle Royale Card */}
+            <div className="mode-card br-card premium-glass" onClick={() => navigate('/arena')}>
+              <div className="card-bg-image br-bg"></div>
+              <div className="card-overlay"></div>
+              <div className="card-content">
+                <div className="card-header">
+                  <span className="card-tag neo-tag">RANKED</span>
+                  <span className="player-count"><Users size={14}/> 100/100</span>
+                </div>
+                <div className="card-body">
+                  <h2 className="font-orbitron cyber-glitch" data-text="TURBO ARENA BR">TURBO ARENA BR</h2>
+                  <p className="font-montserrat">Drop into the cyber-cityscape. Survive against 99 other mechs in the ultimate test of combat efficiency.</p>
+                </div>
+                <div className="card-footer">
+                  <button className="action-btn deploy-btn font-orbitron">
+                    <Zap size={18} /> DEPLOY NOW
+                  </button>
+                </div>
               </div>
-              <div className="stat-box">
-                <span className="stat-label">WIN RATE</span>
-                <span className="stat-value">68%</span>
+            </div>
+          </div>
+
+          <div className="secondary-modes">
+            {/* PVE Card */}
+            <div className="mode-card pve-card premium-glass" onClick={() => navigate('/battle')}>
+              <div className="card-bg-image pve-bg"></div>
+              <div className="card-overlay"></div>
+              <div className="card-content">
+                 <div className="card-header">
+                  <span className="card-tag training-tag">TRAINING</span>
+                </div>
+                <div className="card-body">
+                  <h3 className="font-orbitron">AI COMBAT SIM</h3>
+                  <p>Hone your skills against our advanced neural-network bots.</p>
+                </div>
+                <button className="action-btn secondary-btn font-orbitron">
+                  <Play size={16} fill="currentColor" /> INITIATE
+                </button>
+              </div>
+            </div>
+
+            {/* 1v1 Arena */}
+            <div className="mode-card pvp-card premium-glass locked">
+               <div className="card-bg-image pvp-bg"></div>
+               <div className="card-overlay"></div>
+               <div className="card-content">
+                 <div className="card-header">
+                  <span className="card-tag locked-tag">MAINTENANCE</span>
+                </div>
+                <div className="card-body">
+                  <h3 className="font-orbitron">1 V 1 DUELS</h3>
+                  <p>The Colosseum is currently undergoing system upgrades.</p>
+                </div>
+                 <button className="action-btn locked-btn font-orbitron" disabled>
+                  OFFLINE
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Player Stats Panel below modes */}
+          <div className="stats-dashboard premium-glass neo-border">
+            <h3 className="font-orbitron section-sub"><Activity size={18} color="var(--primary)" /> COMBAT TELEMETRY</h3>
+            <div className="stat-grid">
+              <div className="stat-cell">
+                <Crosshair className="stat-icon" size={24}/>
+                <div className="stat-data">
+                  <span className="stat-value font-orbitron">{profile?.stats?.totalMatches || 0}</span>
+                  <span className="stat-label font-montserrat">DROPS</span>
+                </div>
+              </div>
+              <div className="stat-cell">
+                <TargetIcon className="stat-icon" />
+                <div className="stat-data">
+                  <span className="stat-value font-orbitron text-primary">{profile?.stats?.winRate || '0%'}</span>
+                  <span className="stat-label font-montserrat">WIN RATE</span>
+                </div>
+              </div>
+              <div className="stat-cell">
+                <Zap className="stat-icon" size={24}/>
+                <div className="stat-data">
+                  <span className="stat-value font-orbitron text-secondary">{profile?.stats?.aiDefeated || 0}</span>
+                  <span className="stat-label font-montserrat">BOTS DESTROYED</span>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* RIGHT SECTION: Logs & Leaderboard */}
-        <aside className="lobby-sidebar">
-          <div className="sidebar-section glass-panel">
-            <h3 className="font-montserrat"><Shield size={18} /> COMBAT LOG</h3>
+        {/* RIGHT SECTION: Logs, Nodes, Leaderboard */}
+        <aside className="system-panel">
+          
+          <div className="sys-widget premium-glass neo-border">
+            <div className="widget-header">
+              <Shield size={16} />
+              <h3 className="font-orbitron">COMBAT LOG</h3>
+            </div>
             <div className="log-list">
               {profile?.matches?.length > 0 ? (
-                profile.matches.slice(0, 3).map((match, i) => (
-                  <div key={i} className={`log-item ${match.result.toLowerCase()}`}>
-                    <div className="log-info">
-                      <strong>{match.result}</strong>
-                      <span>vs {match.opponent}</span>
+                profile.matches.map((match, i) => (
+                  <div key={i} className={`log-entry ${match.result.toLowerCase()}`}>
+                    <div className="log-indicator"></div>
+                    <div className="log-details">
+                      <span className="log-result font-orbitron">{match.result}</span>
+                      <span className="log-opponent">vs {match.opponent}</span>
                     </div>
-                    <span className="xp-change">+{match.xpChange} XP</span>
+                    <div className="log-reward font-orbitron">+{match.xpChange} XP</div>
                   </div>
                 ))
               ) : (
-                <div className="empty-msg">No combat data found for Pilot.</div>
+                <div className="empty-state">No combat telemetry available.</div>
               )}
             </div>
           </div>
 
-          <div className="sidebar-section glass-panel">
-            <h3 className="font-montserrat"><Trophy size={18} /> GLOBAL PILOTS</h3>
+          <div className="sys-widget premium-glass neo-border">
+            <div className="widget-header">
+              <Trophy size={16} color="#ffb800" />
+              <h3 className="font-orbitron">GLOBAL LEADERBOARD</h3>
+            </div>
             <div className="leaderboard-list">
               {leaderboard.map((player, idx) => (
-                <div key={idx} className={`leader-item ${idx === 0 ? 'top-one' : ''}`}>
-                  <span className="rank">#{idx + 1} {player.username.toUpperCase()}</span>
-                  <span className="lvl">LVL {player.level}</span>
+                <div key={idx} className={`rank-entry ${idx === 0 ? 'rank-1' : ''}`}>
+                  <div className="rank-num font-orbitron">{idx + 1}</div>
+                  <div className="rank-player">
+                    <span className="rank-name font-montserrat">{player.username.toUpperCase()}</span>
+                    <span className="rank-lvl font-orbitron">LVL {player.level}</span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="sidebar-section glass-panel">
-            <h3 className="font-montserrat"><Zap size={18} /> SERVER NODES</h3>
+          <div className="sys-widget premium-glass neo-border nodes-widget">
+            <div className="widget-header">
+              <Activity size={16} color="#00ffff" />
+              <h3 className="font-orbitron">NETWORK STATUS</h3>
+            </div>
             <div className="nodes-list">
               {nodes.map((node, i) => (
-                <div key={i} className="node-item">
-                  <span className="node-name">{node.name}</span>
-                  <span className="node-status" style={{ color: node.color }}>
-                    {node.status} [{node.ping}]
-                  </span>
+                <div key={i} className="node-entry">
+                  <div className="node-info">
+                    <span className="node-dot" style={{ backgroundColor: node.color, boxShadow: `0 0 8px ${node.color}` }}></span>
+                    <span className="node-name font-orbitron">{node.name}</span>
+                  </div>
+                  <div className="node-stats">
+                     <span className="node-ping" style={{ color: node.color }}>{node.ping}</span>
+                     <span className="node-status font-montserrat">{node.status}</span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
         </aside>
       </main>
     </div>
   );
 };
 
+// Component helper for an icon
+const TargetIcon = ({ className }) => (
+  <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <circle cx="12" cy="12" r="6"></circle>
+    <circle cx="12" cy="12" r="2"></circle>
+  </svg>
+);
+
 export default Lobby;
+
