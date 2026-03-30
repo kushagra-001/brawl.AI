@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Play, RotateCcw, ChevronLeft, Send, Terminal } from 'lucide-react';
@@ -20,7 +20,7 @@ const Battle = () => {
   const navigate = useNavigate();
   const [lang, setLang] = useState('python');
   const [code, setCode] = useState('');
-  const [challenge, setChallenge] = useState(CHALLENGES[0]);
+  const [challenge] = useState(CHALLENGES[0]);
   const [output, setOutput] = useState('');
   const [isExecuting, setIsExecuting] = useState(false);
   const [hp, setHp] = useState({ player: 100, ai: 100 });

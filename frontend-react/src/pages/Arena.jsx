@@ -7,6 +7,84 @@ import './Arena.css';
 // Importing image directly in React
 import turboBg from '../assets/turbo_bg.png';
 
+// ── CLASSES ──
+class Fighter {
+    constructor(cfg) {
+        Object.assign(this, {
+            x:cfg.x, y:0, w:70, h:110,
+            velX:0, velY:0, onGround:true,
+            hp:cfg.maxHp, maxHp:cfg.maxHp,
+            speed:cfg.speed||5, jumpF:cfg.jumpF||-15,
+            facingRight:cfg.facingRight,
+            color:cfg.color, glowColor:cfg.glowColor,
+            eyeColor:cfg.eyeColor||'#fff',
+            state:'idle', stateT:0,
+            blocking:false, attackCD:0,
+            isPlayer:cfg.isPlayer||false,
+            name:cfg.name,
+            frameColor: cfg.glowColor === '#00ff73' ? '#102e1a' : '#2e1010',
+        });
+    }
+
+    get cx() { return this.x + this.w/2; }
+
+    reset(x, floor) {
+        this.x = x; this.y = floor - this.h;
+        this.velX = 0; this.velY = 0;
+        this.hp = this.maxHp; this.onGround = true;
+        this.state = 'idle'; this.stateT = 0;
+        this.blocking = false; this.attackCD = 0;
+    }
+
+    takeDamage(dmg) {
+        if (this.blocking) dmg = Math.max(2, Math.floor(dmg * 0.12));
+        this.hp = Math.max(0, this.hp - dmg);
+        this.state = 'hurt'; this.stateT = 14;
+        return dmg;
+    }
+
+    attackBox() {
+        const dir = this.facingRight ? 1 : -1;
+        return { x: this.cx + dir*10, y: this.y+20, w:65, h:55 };
+    }
+
+    draw(ctx, t, floor) {
+        ctx.save();
+        const dir = this.facingRight ? 1 : -1;
+        const cx = this.cx, cy = this.y;
+        const h = this.h;
+
+        if (this.state === 'hurt') ctx.globalAlpha = 0.5 + Math.sin(t*0.6)*0.5;
+
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.45)';
+        ctx.beginPath();
+        ctx.ellipse(cx, floor+4, 45, 12, 0, 0, Math.PI*2);
+        ctx.fill();
+
+        ctx.shadowColor = this.glowColor;
+        ctx.shadowBlur = 10;
+
+        // Simple render for performance in this demo
+        ctx.fillStyle = this.color;
+        ctx.fillRect(cx - 25, cy, 50, h);
+        
+        // Eyes
+        ctx.fillStyle = this.eyeColor;
+        ctx.fillRect(cx + (dir * 10), cy + 20, 15, 5);
+
+        // Arm
+        ctx.fillStyle = this.frameColor;
+        if (this.state === 'punch') {
+            ctx.fillRect(cx + (dir * 20), cy + 40, 40, 15);
+        } else {
+            ctx.fillRect(cx + (dir * 15), cy + 40, 15, 40);
+        }
+
+        ctx.restore();
+    }
+}
+
 const Arena = () => {
     const canvasRef = useRef(null);
     const { user } = useAuth();
@@ -33,85 +111,7 @@ const Arena = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         
-        // ── CLASSES ──
-        class Fighter {
-            constructor(cfg) {
-                Object.assign(this, {
-                    x:cfg.x, y:0, w:70, h:110,
-                    velX:0, velY:0, onGround:true,
-                    hp:cfg.maxHp, maxHp:cfg.maxHp,
-                    speed:cfg.speed||5, jumpF:cfg.jumpF||-15,
-                    facingRight:cfg.facingRight,
-                    color:cfg.color, glowColor:cfg.glowColor,
-                    eyeColor:cfg.eyeColor||'#fff',
-                    state:'idle', stateT:0,
-                    blocking:false, attackCD:0,
-                    isPlayer:cfg.isPlayer||false,
-                    name:cfg.name,
-                    frameColor: cfg.glowColor === '#00ff73' ? '#102e1a' : '#2e1010',
-                });
-            }
-
-            get cx() { return this.x + this.w/2; }
-
-            reset(x, floor) {
-                this.x = x; this.y = floor - this.h;
-                this.velX = 0; this.velY = 0;
-                this.hp = this.maxHp; this.onGround = true;
-                this.state = 'idle'; this.stateT = 0;
-                this.blocking = false; this.attackCD = 0;
-            }
-
-            takeDamage(dmg) {
-                if (this.blocking) dmg = Math.max(2, Math.floor(dmg * 0.12));
-                this.hp = Math.max(0, this.hp - dmg);
-                this.state = 'hurt'; this.stateT = 14;
-                return dmg;
-            }
-
-            attackBox() {
-                const dir = this.facingRight ? 1 : -1;
-                return { x: this.cx + dir*10, y: this.y+20, w:65, h:55 };
-            }
-
-            draw(ctx, t, floor) {
-                ctx.save();
-                const dir = this.facingRight ? 1 : -1;
-                const cx = this.cx, cy = this.y;
-                const h = this.h;
-                const phase = t * 0.1;
-
-                if (this.state === 'hurt') ctx.globalAlpha = 0.5 + Math.sin(t*0.6)*0.5;
-
-                // Shadow
-                ctx.fillStyle = 'rgba(0,0,0,0.45)';
-                ctx.beginPath();
-                ctx.ellipse(cx, floor+4, 45, 12, 0, 0, Math.PI*2);
-                ctx.fill();
-
-                ctx.shadowColor = this.glowColor;
-                ctx.shadowBlur = 10;
-
-                // Simple render for performance in this demo
-                // (Using the roundRect from legacy would be better, but I'll simplify here for brevity)
-                ctx.fillStyle = this.color;
-                ctx.fillRect(cx - 25, cy, 50, h);
-                
-                // Eyes
-                ctx.fillStyle = this.eyeColor;
-                ctx.fillRect(cx + (dir * 10), cy + 20, 15, 5);
-
-                // Arm
-                ctx.fillStyle = this.frameColor;
-                if (this.state === 'punch') {
-                    ctx.fillRect(cx + (dir * 20), cy + 40, 40, 15);
-                } else {
-                    ctx.fillRect(cx + (dir * 15), cy + 40, 15, 40);
-                }
-
-                ctx.restore();
-            }
-        }
+        // Fighter class has been moved outside the component
 
         const W = canvas.width = Math.min(window.innerWidth - 80, 960);
         const H = canvas.height = 500;
@@ -223,7 +223,7 @@ const Arena = () => {
             window.removeEventListener('keyup', handleKeyUp);
             cancelAnimationFrame(gameLoopRef.current);
         };
-    }, []);
+    }, [user?.username]);
 
     return (
         <div className="arena-screen">

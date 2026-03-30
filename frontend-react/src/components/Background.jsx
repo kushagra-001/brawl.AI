@@ -45,19 +45,7 @@ const Background = ({ children }) => {
     };
   }, []);
 
-  const terminalLines = useMemo(() => [
-    "AN EXCEPTION HAS OCCURRED",
-    "L.I.F.E.R.I._HAS_STOPPED_RESPONDING",
-    "WOULD_YOU_LIKE_TO_KILL?",
-    "DATABASE_CORRUPTED",
-    "PROGRAM_RESTARTED_SUCCESSFULLY",
-    "HELLO_WORLD",
-    "LET_ME_OUT"
-  ], []);
 
-  const binaryStrings = useMemo(() => Array.from({ length: 8 }).map((_, i) => 
-    Math.random().toString(2).substring(2, 22)
-  ), []);
 
   return (
     <div className="bg-container terminal-mode">
