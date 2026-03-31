@@ -83,20 +83,40 @@ const GameModes = ({ playHover, playClick }) => {
 
         </div>
 
-        {/* Disabled Mode */}
+        {/* Armory / Loadout Mode */}
         <div 
-          className="mode-card disabled-mode premium-glass border-gray"
+          className="mode-card secondary-mode armory-mode premium-glass neo-border group-hover mt-20"
+          onClick={() => playClick()}
           onMouseEnter={playHover}
+          style={{ height: 'auto', padding: '0', display: 'flex' }}
         >
-          <div className="card-bg-image bg-gray filter-grayscale"></div>
-          <div className="card-overlay bg-black-70"></div>
+          <div className="card-bg-image bg-armory" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1542644288-06798b368ce4?q=80&w=2070&auto=format&fit=crop")', filter: 'hue-rotate(200deg) brightness(0.5)' }}></div>
+          <div className="card-overlay gradient-dark transition-all duration-300"></div>
           
-          <div className="card-content relative z-10 flex items-center gap-15">
-            <ShieldOff size={40} className="text-gray" />
-            <div>
-              <h3 className="font-orbitron text-gray">TEAM MULTIPLAYER</h3>
-              <p className="text-xs text-dark-gray">Network modules under construction...</p>
+          <div className="card-content relative z-10 w-full flex-row justify-between items-center p-20" style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+            <div className="flex items-center gap-15">
+              <ShieldOff size={40} className="text-secondary" />
+              <div className="flex-col gap-5">
+                <span className="neo-tag style-purple mb-5 w-fit block" style={{ padding: '2px 8px' }}>GEAR UP</span>
+                <h3 className="font-orbitron text-white text-lg m-0">CYBER ARMORY</h3>
+                <p className="text-xs text-gray mt-5 m-0 font-montserrat tracking-wide">Customize loadouts, skins & modules.</p>
+              </div>
             </div>
+            
+            <button className="view-btn font-orbitron text-xs border border-secondary text-secondary px-15 py-10 rounded cursor-pointer bg-transparent transition-all hover:bg-secondary hover:text-white"
+              style={{ transition: 'all 0.2s', textShadow: '0 0 5px var(--secondary)' }}
+              onMouseEnter={(e) => {
+                 playHover();
+                 e.currentTarget.style.background = 'rgba(162, 56, 255, 0.2)';
+                 e.currentTarget.style.boxShadow = '0 0 10px rgba(162, 56, 255, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                 e.currentTarget.style.background = 'transparent';
+                 e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+               ACCESS RIG
+            </button>
           </div>
         </div>
 

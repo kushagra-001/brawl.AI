@@ -8,6 +8,8 @@ import StatsDashboard from '../components/Lobby/StatsDashboard';
 import GameModes from '../components/Lobby/GameModes';
 import RightPanel from '../components/Lobby/RightPanel';
 import DailyMissions from '../components/Lobby/DailyMissions';
+import ActiveEvent from '../components/Lobby/ActiveEvent';
+import RecentMatches from '../components/Lobby/RecentMatches';
 
 const Lobby = () => {
   const [profile, setProfile] = useState(null);
@@ -95,10 +97,12 @@ const Lobby = () => {
             playClick={playClick} 
           />
           <StatsDashboard stats={profile.stats} />
+          <RecentMatches playHover={playHover} playClick={playClick} />
         </div>
 
         {/* CENTER COLUMN: Game Modes */}
         <div className="grid-center-col">
+          <ActiveEvent playHover={playHover} playClick={playClick} />
           <GameModes playHover={playHover} playClick={playClick} />
         </div>
 
