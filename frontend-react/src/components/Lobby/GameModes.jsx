@@ -1,125 +1,89 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap, Play, Swords, ShieldOff } from 'lucide-react';
+import { Bot, Swords, Users, Trophy } from 'lucide-react';
 
 const GameModes = ({ playHover, playClick }) => {
   const navigate = useNavigate();
 
+  const modes = [
+    {
+      id: 'ai',
+      title: 'AI Showdown',
+      icon: <Bot size={28} />,
+      desc: 'Train your reflexes against neural bots.',
+      tag: 'TRAINING',
+      color: 'cyan',
+      bgImg: 'url("https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=2070&auto=format&fit=crop")'
+    },
+    {
+      id: 'duel',
+      title: 'Duel',
+      icon: <Swords size={28} />,
+      desc: '1v1 Combat. Prove your dominance.',
+      tag: 'RANKED',
+      color: 'pink',
+      bgImg: 'url("https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop")'
+    },
+    {
+      id: 'squad',
+      title: 'Squad Battle',
+      icon: <Users size={28} />,
+      desc: 'Team up. Destroy the enemy core.',
+      tag: 'MULTIPLAYER',
+      color: 'purple',
+      bgImg: 'url("https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop")'
+    },
+    {
+      id: 'leaderboard',
+      title: 'Leaderboard',
+      icon: <Trophy size={28} />,
+      desc: 'See who reigns supreme in the arena.',
+      tag: 'GLOBAL',
+      color: 'gold',
+      bgImg: 'url("https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop")'
+    }
+  ];
+
+  const handleModeClick = (id) => {
+    playClick();
+    if (id === 'ai') navigate('/battle');
+    if (id === 'duel') navigate('/arena');
+    // others can be stubs
+  };
+
   return (
-    <section className="central-hub">
-      <div className="section-title font-orbitron">
-        <h2>WARZONE SELECTOR</h2>
-        <div className="title-line"></div>
+    <section className="anime-modes-section">
+      <div className="section-title-anime">
+        <h2 className="font-orbitron cyber-text-glow">SELECT ARENA</h2>
       </div>
 
-      <div className="modes-layout flex-col gap-20">
-        
-        {/* Main Feature: AI BATTLE */}
-        <div 
-          className="mode-card main-mode premium-glass neo-border group-hover"
-          onClick={() => { playClick(); navigate('/battle'); }}
-          onMouseEnter={playHover}
-        >
-          <div className="card-bg-image main-bg"></div>
-          <div className="card-overlay gradient-blue"></div>
-          
-          <div className="card-content flex-col justify-between h-full relative z-10">
-            <div className="card-header flex justify-between">
-              <span className="neo-tag">MAIN PROTOCOL</span>
-              <span className="player-count"><Zap size={14}/> ONLINE</span>
-            </div>
-
-            <div className="card-body">
-               <h2 className="font-orbitron cyber-glitch" data-text="AI COMBAT SIM">AI COMBAT SIM</h2>
-               <p className="font-montserrat">Enter the neural simulation. Train your logic and reflexes against state-of-the-art bots.</p>
-            </div>
-
-            <div className="card-footer mt-auto">
-              <button className="deploy-btn font-orbitron bg-primary text-black">
-                <Play size={18} fill="currentColor"/> INITIATE BATTLE
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Secondary Modes Grid */}
-        <div className="grid-2col gap-20">
-          
-          {/* Quick Match */}
-          <div 
-            className="mode-card secondary-mode premium-glass neo-border group-hover"
-            onClick={() => { playClick(); navigate('/arena'); }}
-            onMouseEnter={playHover}
-          >
-            <div className="card-bg-image bg-orange"></div>
-            <div className="card-overlay gradient-dark"></div>
-            
-            <div className="card-content relative z-10 flex-col justify-between">
-              <span className="neo-tag style-orange mb-10 w-fit">QUICK</span>
-              <div className="card-body">
-                <h3 className="font-orbitron">BATTLE ROYALE</h3>
-                <p className="text-xs text-gray mt-5">Drop in. Survive against 99.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Ranked Mode */}
-          <div 
-            className="mode-card secondary-mode premium-glass neo-border group-hover"
-            onClick={() => playClick()}
-            onMouseEnter={playHover}
-          >
-             <div className="card-bg-image bg-purple"></div>
-             <div className="card-overlay gradient-purple"></div>
-            
-             <div className="card-content relative z-10 flex-col justify-between">
-               <span className="neo-tag style-purple mb-10 w-fit">RANKED</span>
-               <div className="card-body">
-                 <h3 className="font-orbitron">1 V 1 ARENA</h3>
-                 <p className="text-xs text-gray mt-5">Climb the global ladder.</p>
+      <div className="anime-modes-grid">
+         {modes.map((mode) => (
+           <div 
+             key={mode.id}
+             className={`anime-card color-theme-${mode.color}`}
+             onClick={() => handleModeClick(mode.id)}
+             onMouseEnter={playHover}
+           >
+             <div className="anime-card-bg" style={{ backgroundImage: mode.bgImg }}></div>
+             <div className="anime-card-overlay"></div>
+             <div className="anime-card-content">
+               <div className="anime-tag-bar">
+                 <span className="anime-tag">{mode.tag}</span>
+               </div>
+               
+               <div className="anime-card-center">
+                 <div className="anime-icon-wrapper">{mode.icon}</div>
+                 <h2 className="font-orbitron anime-title">{mode.title}</h2>
+                 <p className="font-montserrat anime-desc">{mode.desc}</p>
+               </div>
+               
+               <div className="anime-card-action">
+                 <button className="anime-btn font-orbitron">ENTER</button>
                </div>
              </div>
-          </div>
-
-        </div>
-
-        {/* Armory / Loadout Mode */}
-        <div 
-          className="mode-card secondary-mode armory-mode premium-glass neo-border group-hover mt-20"
-          onClick={() => playClick()}
-          onMouseEnter={playHover}
-          style={{ height: 'auto', padding: '0', display: 'flex' }}
-        >
-          <div className="card-bg-image bg-armory" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1542644288-06798b368ce4?q=80&w=2070&auto=format&fit=crop")', filter: 'hue-rotate(200deg) brightness(0.5)' }}></div>
-          <div className="card-overlay gradient-dark transition-all duration-300"></div>
-          
-          <div className="card-content relative z-10 w-full flex-row justify-between items-center p-20" style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
-            <div className="flex items-center gap-15">
-              <ShieldOff size={40} className="text-secondary" />
-              <div className="flex-col gap-5">
-                <span className="neo-tag style-purple mb-5 w-fit block" style={{ padding: '2px 8px' }}>GEAR UP</span>
-                <h3 className="font-orbitron text-white text-lg m-0">CYBER ARMORY</h3>
-                <p className="text-xs text-gray mt-5 m-0 font-montserrat tracking-wide">Customize loadouts, skins & modules.</p>
-              </div>
-            </div>
-            
-            <button className="view-btn font-orbitron text-xs border border-secondary text-secondary px-15 py-10 rounded cursor-pointer bg-transparent transition-all hover:bg-secondary hover:text-white"
-              style={{ transition: 'all 0.2s', textShadow: '0 0 5px var(--secondary)' }}
-              onMouseEnter={(e) => {
-                 playHover();
-                 e.currentTarget.style.background = 'rgba(162, 56, 255, 0.2)';
-                 e.currentTarget.style.boxShadow = '0 0 10px rgba(162, 56, 255, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                 e.currentTarget.style.background = 'transparent';
-                 e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-               ACCESS RIG
-            </button>
-          </div>
-        </div>
-
+           </div>
+         ))}
       </div>
     </section>
   );

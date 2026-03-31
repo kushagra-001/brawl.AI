@@ -1,47 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Lobby.css';
 
-// Import newly created sub-components
+// Anime Theme Components
 import TopBar from '../components/Lobby/TopBar';
 import PlayerProfile from '../components/Lobby/PlayerProfile';
-import StatsDashboard from '../components/Lobby/StatsDashboard';
 import GameModes from '../components/Lobby/GameModes';
-import RightPanel from '../components/Lobby/RightPanel';
+import FriendsList from '../components/Lobby/FriendsList';
+import ChatBox from '../components/Lobby/ChatBox';
 import DailyMissions from '../components/Lobby/DailyMissions';
-import ActiveEvent from '../components/Lobby/ActiveEvent';
-import RecentMatches from '../components/Lobby/RecentMatches';
 
 const Lobby = () => {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [soundOn, setSoundOn] = useState(true);
-  const [theme, setTheme] = useState('neon'); // 'neon' or 'dark'
 
-  // Refs for audio objects (bonus feature)
+  // Audio elements
   const hoverSound = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'));
   const clickSound = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'));
 
   useEffect(() => {
-    // Configure audio volumes
     hoverSound.current.volume = 0.1;
     clickSound.current.volume = 0.3;
 
-    // Simulate loading data and entry animation
     setTimeout(() => {
       setProfile({
-        level: 42,
-        xp: 3200,
-        maxXP: 5000,
-        rank: 'PLATINUM',
-        stats: {
-          totalMatches: 842,
-          wins: 512,
-          winRate: '60%',
-          streak: 5
-        }
+        level: 24,
+        xp: 8500,
+        maxXP: 10000,
+        rank: 'WARRIOR'
       });
       setIsLoading(false);
-    }, 1500); // 1.5s loading animation
+    }, 1200);
   }, []);
 
   const playHover = () => {
@@ -56,64 +45,58 @@ const Lobby = () => {
     clickSound.current.play().catch(e => console.log('Audio block', e));
   };
 
-  const toggleSound = () => setSoundOn(!soundOn);
-  const toggleTheme = () => setTheme(theme === 'neon' ? 'dark' : 'neon');
-
   if (isLoading) {
     return (
-      <div className="lobby-loading-screen">
-        <div className="loader-glitch" data-text="INITIALIZING ARENA...">INITIALIZING ARENA...</div>
-        <div className="loading-bar"><div className="loading-fill"></div></div>
+      <div className="lobby-loading-anime">
+        <div className="loader-glitch-anime text-neon">CONNECTING TO ARENA...</div>
+        <div className="loading-bar-anime"><div className="loading-fill-anime bg-primary"></div></div>
       </div>
     );
   }
 
   return (
-    <div className={`new-lobby-container theme-${theme}`}>
-      {/* Dynamic Backgrounds */}
-      <div className="lobby-stars-bg"></div>
-      <div className="lobby-vignette"></div>
+    <div className="anime-lobby-container">
+      {/* Background Anime Assets */}
+      <div className="anime-bg-main" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2074&auto=format&fit=crop")' }}></div>
+      <div className="anime-bg-overlay"></div>
+      <div className="anime-particles"></div>
 
-      {/* Structured Layout Wrapper */}
-      <div className="lobby-grid-layout">
+      {/* Grid Layout */}
+      <div className="anime-grid-layout">
         
-        {/* TOP BAR */}
-        <div className="grid-header">
+        {/* Top Header */}
+        <div className="grid-header-anime">
           <TopBar 
             playHover={playHover} 
             playClick={playClick} 
             soundOn={soundOn} 
-            toggleSound={toggleSound}
-            theme={theme}
-            toggleTheme={toggleTheme}
+            toggleSound={() => setSoundOn(!soundOn)}
           />
         </div>
 
-        {/* LEFT COLUMN: Profile & Stats */}
-        <div className="grid-left-col flex-col gap-20">
+        {/* Left Col: Profile & Missions */}
+        <div className="grid-left-col-anime flex-col gap-20">
           <PlayerProfile 
             profile={profile} 
             playHover={playHover} 
             playClick={playClick} 
           />
-          <StatsDashboard stats={profile.stats} />
-          <RecentMatches playHover={playHover} playClick={playClick} />
+          <DailyMissions playHover={playHover} playClick={playClick} />
         </div>
 
-        {/* CENTER COLUMN: Game Modes */}
-        <div className="grid-center-col">
-          <ActiveEvent playHover={playHover} playClick={playClick} />
+        {/* Center Col: Game Modes */}
+        <div className="grid-center-col-anime">
           <GameModes playHover={playHover} playClick={playClick} />
         </div>
 
-        {/* RIGHT COLUMN: Social, Chat & Leaderboard */}
-        <div className="grid-right-col">
-          <RightPanel playHover={playHover} playClick={playClick} />
-        </div>
-
-        {/* BOTTOM SECTION: Missions */}
-        <div className="grid-bottom-row">
-          <DailyMissions playHover={playHover} playClick={playClick} />
+        {/* Right Col: Friends & Chat */}
+        <div className="grid-right-col-anime flex-col gap-20">
+          <div className="friends-panel flex-1">
+            <FriendsList playHover={playHover} playClick={playClick} />
+          </div>
+          <div className="chat-panel flex-1">
+             <ChatBox playHover={playHover} playClick={playClick} />
+          </div>
         </div>
 
       </div>

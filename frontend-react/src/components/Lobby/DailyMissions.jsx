@@ -1,46 +1,45 @@
 import React from 'react';
-import { Target, Gift, Award, CheckCircle } from 'lucide-react';
+import { Target, Gift, Zap, CheckCircle } from 'lucide-react';
 
 const DailyMissions = ({ playHover, playClick }) => {
   const missions = [
-    { id: 1, title: 'First Blood', desc: 'Secure 1 takedown in any game mode.', reward: '100 XP', icon: <Target className="text-primary"/>, isComplete: true },
-    { id: 2, title: 'Neural Mastery', desc: 'Win 2 AI simulation matches.', reward: '250 XP', icon: <Award className="text-secondary"/>, isComplete: false },
-    { id: 3, title: 'Daily Login', desc: 'Log in to the arena.', reward: '50 $CORE', icon: <Gift className="#ffb800"/>, isComplete: true }
+    { id: 1, title: 'Win 3 battles', reward: '100 XP', icon: <Target className="text-primary"/>, isComplete: false },
+    { id: 2, title: 'Play 1 squad match', reward: '250 CR', icon: <Zap className="text-secondary"/>, isComplete: false },
+    { id: 3, title: 'Daily Login', reward: '50 CR', icon: <Gift className="text-gold"/>, isComplete: true }
   ];
 
   return (
-    <section className="bottom-section missions-panel premium-glass neo-border">
-      <div className="missions-header flex items-center justify-between mb-15">
-        <h3 className="section-header font-orbitron m-0">DAILY MISSIONS</h3>
-        <span className="font-montserrat text-xs text-primary bg-primary-10 px-10 py-5 rounded">Resets in 14h 22m</span>
+    <section className="anime-missions-panel glow-border">
+      <div className="anime-panel-header mt-0">
+         <h3 className="section-header font-orbitron m-0 cyber-text-shadow">BOUNTY BOARDS</h3>
       </div>
 
-      <div className="missions-grid">
+      <div className="anime-mission-list">
         {missions.map(m => (
-          <div key={m.id} className={`mission-card premium-glass neo-border flex-row items-center gap-15 ${m.isComplete ? 'completed opacity-70' : ''}`} onMouseEnter={playHover}>
-            <div className="mission-icon bg-black-50 p-10 rounded">
-              {m.isComplete ? <CheckCircle className="text-neon" size={24}/> : m.icon}
+          <div 
+             key={m.id} 
+             className={`anime-mission-card flex items-center justify-between p-15 group-hover ${m.isComplete ? 'completed-mission' : ''}`}
+             onMouseEnter={playHover}
+             onClick={playClick}
+          >
+            <div className="flex items-center gap-15 flex-1">
+               <div className="mission-icon bg-opacity-20 p-10 rounded">
+                 {m.isComplete ? <CheckCircle className="text-neon" size={24}/> : m.icon}
+               </div>
+               <div>
+                  <h4 className={`font-orbitron m-0 ${m.isComplete ? 'text-gray line-through' : 'text-white'}`}>{m.title}</h4>
+                  <p className="font-montserrat text-xs text-secondary mt-5 m-0 font-bold">Reward: {m.reward}</p>
+               </div>
             </div>
             
-            <div className="mission-info flex-1">
-              <h4 className={`font-orbitron ${m.isComplete ? 'line-through text-gray' : 'text-white'}`}>{m.title}</h4>
-              <p className="font-montserrat text-xs text-gray mt-5">{m.desc}</p>
+            <div className="mission-action">
+               <button 
+                 className={`bounty-btn font-orbitron text-xs font-bold px-15 py-5 rounded border-none ${m.isComplete ? 'bg-gray text-dark-gray' : 'bg-primary text-black cursor-pointer'}`}
+                 disabled={m.isComplete}
+               >
+                 {m.isComplete ? 'DONE' : 'GO'}
+               </button>
             </div>
-            
-            <div className="mission-reward bg-black-50 px-15 py-5 rounded border border-gray">
-              <span className={`font-orbitron text-sm ${m.isComplete ? 'text-gray' : 'text-primary'}`}>{m.reward}</span>
-            </div>
-            
-            {!m.isComplete && (
-              <button className="claim-btn font-orbitron text-xs bg-primary text-black px-15 py-5 rounded" onClick={playClick}>
-                GO
-              </button>
-            )}
-            {m.isComplete && (
-              <button className="claim-btn font-orbitron text-xs bg-gray text-dark-gray px-15 py-5 rounded cursor-not-allowed">
-                DONE
-              </button>
-            )}
           </div>
         ))}
       </div>
