@@ -16,6 +16,7 @@ import Spectator from '../components/Lobby/Spectator';
 import BattleFeed from '../components/Lobby/BattleFeed';
 import ArenaCore from '../components/Lobby/ArenaCore';
 import NotificationToast from '../components/Lobby/NotificationToast';
+import PlayerProfilePanel from '../components/Lobby/PlayerProfilePanel';
 import { Loader2 } from 'lucide-react';
 
 const Lobby = () => {
@@ -230,11 +231,6 @@ const Lobby = () => {
 
         {/* Left Col: Profile, Stats, Missions */}
         <div className="grid-left-col-anime flex-col gap-20 custom-scrollbar" style={{ overflowY: 'auto', paddingBottom: '20px' }}>
-          <PlayerProfile 
-            profile={profile} 
-            playHover={playHover} 
-            playClick={playClick} 
-          />
           <StatsDashboard stats={profile.stats} />
           <DailyMissions playHover={playHover} playClick={playClick} />
           <BattleFeed playHover={playHover} />
@@ -246,8 +242,9 @@ const Lobby = () => {
            {renderCenterView()}
         </div>
 
-        {/* Right Col: Friends & Chat */}
+        {/* Right Col: Profile, Friends & Chat */}
         <div className="grid-right-col-anime flex-col gap-20" style={{ paddingBottom: '20px' }}>
+          <PlayerProfilePanel playHover={playHover} playClick={playClick} />
           <div className="friends-panel flex-1" style={{ minHeight: '50%' }}>
             <FriendsList playHover={playHover} playClick={playClick} />
           </div>
