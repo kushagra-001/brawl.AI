@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Lobby.css';
 
@@ -15,6 +15,7 @@ import Store from '../components/Lobby/Store';
 import Spectator from '../components/Lobby/Spectator';
 import BattleFeed from '../components/Lobby/BattleFeed';
 import ArenaCore from '../components/Lobby/ArenaCore';
+import NotificationToast from '../components/Lobby/NotificationToast';
 import { Loader2 } from 'lucide-react';
 
 const Lobby = () => {
@@ -22,6 +23,7 @@ const Lobby = () => {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [soundOn, setSoundOn] = useState(true);
+  const [notifications, setNotifications] = useState([]);
   
   // Advanced State Management
   const [activeTab, setActiveTab] = useState('home');
@@ -30,6 +32,15 @@ const Lobby = () => {
   // Audio elements
   const hoverSound = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'));
   const clickSound = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'));
+
+  const addNotification = useCallback((message, type) => {
+    const id = Date.now();
+    setNotifications(prev => [...prev, { id, message, type }]);
+  }, []);
+
+  const removeNotification = useCallback((id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  }, []);
 
   useEffect(() => {
     hoverSound.current.volume = 0.1;
@@ -44,8 +55,28 @@ const Lobby = () => {
         stats: { totalMatches: 1420, winRate: '68%', streak: 12 }
       });
       setIsLoading(false);
+      
+      // Initial notification
+      addNotification('CONNECTED TO BATTLE CORE', 'rank');
     }, 1200);
-  }, []);
+  }, [addNotification]);
+
+  // Simulation: Trigger random notifications
+  useEffect(() => {
+    if (isLoading) return;
+    const interval = setInterval(() => {
+      const messages = [
+        { text: 'CyberShark is challenging you!', type: 'warn' },
+        { text: 'Daily reward ready to claim', type: 'unlock' },
+        { text: 'New tournament started', type: 'rank' }
+      ];
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      addNotification(msg.text, msg.type);
+    }, 30000); // Pulse every 30s
+    return () => clearInterval(interval);
+  }, [isLoading, addNotification]);
+
+
 
   // Matchmaking Timer Logic
   useEffect(() => {
@@ -133,8 +164,20 @@ const Lobby = () => {
 
       {/* LAYER 4: Anime Characters (unique) */}
       <div className="lobby-anime-chars">
-        <img src={`${import.meta.env.BASE_URL}assets/lobby_warrior.png`} alt="" className="lobby-anime-char char-left" />
-        <img src={`${import.meta.env.BASE_URL}assets/lobby_assassin.png`} alt="" className="lobby-anime-char char-right" />
+        <img src={`/brawl.AI/assets/lobby_warrior.png`} alt="" className="lobby-anime-char char-left" />
+        <img src={`/brawl.AI/assets/lobby_assassin.png`} alt="" className="lobby-anime-char char-right" />
+        <img src={`/brawl.AI/assets/lobby_mage.png`} alt="" className="lobby-anime-char char-center" />
+      </div>
+
+      {/* LAYER 5: Notification Toast Container */}
+      <div className="notif-container">
+        {notifications.map(n => (
+          <NotificationToast 
+            key={n.id} 
+            {...n} 
+            onClose={() => removeNotification(n.id)} 
+          />
+        ))}
       </div>
 
       {/* Full-Screen Matchmaking Overlay */}

@@ -3,9 +3,9 @@ import { useAuth } from '../../context/AuthContext';
 import { Coins, Shield } from 'lucide-react';
 
 const avatars = [
-  'https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=250&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=250&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=250&auto=format&fit=crop'
+  '/brawl.AI/assets/lobby_warrior.png',
+  '/brawl.AI/assets/lobby_assassin.png',
+  '/brawl.AI/assets/lobby_mage.png'
 ];
 
 const PlayerProfile = ({ profile, playHover, playClick }) => {
