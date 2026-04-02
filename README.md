@@ -16,7 +16,10 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?color=00F7FF&center=true&vCenter=true&lines=Fight.+Adapt.+Win.;Outsmart+Your+Opponent.;Enter+The+Arena.;Real-time+AI+Battles." />
+  <img src="<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?color=00F7FF&center=true&vCenter=true&size=28&width=600&lines=⚡+Fight.+Adapt.+Win.;⚡+Outsmart+Your+Opponent.;⚡+Enter+The+Arena.;⚡+Real-time+AI+Battles." />
+</p>
+." />
 </p>
 
 ---
