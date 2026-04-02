@@ -47,15 +47,17 @@ React • Node.js • MongoDB • JavaScript • HTML • CSS
 ## 📸 Preview
 
 <p align="center">
-  <img src="YOUR_IMAGE_1" width="600"/><br><br>
-  <img src="YOUR_IMAGE_2" width="600"/>
+  <img src="<img width="1919" height="1079" alt="Screenshot 2026-04-02 095722" src="https://github.com/user-attachments/assets/6ba5af2d-4a02-4b59-8fa1-4a2259a72ba9" />
+" width="600"/><br><br>
+  <img src="<img width="1919" height="1079" alt="Screenshot 2026-04-02 095732" src="https://github.com/user-attachments/assets/e24ce5c6-632a-4f45-bc9a-0158f7ccb518" />
+" width="600"/>
 </p>
 
 ---
 
 ## 🚀 Installation
 
-git clone https://github.com/YOUR_USERNAME/brawl.ai.git
+git clone https://github.com/anishaa/brawl.ai.git
 cd brawl.ai
 npm install
 npm start
