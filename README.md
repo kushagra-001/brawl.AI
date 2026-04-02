@@ -382,6 +382,23 @@ Phase 8  ░░░░░░░░░░  Deployment & Final Touches             
 ```
 
 ---
+---
+
+## 👥 Team
+
+| Name               | Role                             |
+| -------------      | -------------------------------- |
+| Anisha Ranjan      | Frontend Development & UI Design |
+| Vrinda Khandelwal  | Backend Development              |
+| Dushyant Gaur      | Game Logic & Testing             |
+| Kushagra Bharadwaj | Backend Development              |
+| Aditya Dev Katara  | Game Logic & Testing             |
+
+
+---
+
+**Supervisor:** Mr. Abhishek Singh (Technical Trainer) , 
+Submitted To: Mr. Sanjay Madaan
 
 ---
 
