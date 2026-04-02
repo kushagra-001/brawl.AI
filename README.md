@@ -2,8 +2,7 @@
 
 <p align="center">
   <b>Battle. Think. Dominate.</b><br>
-
-Title  
+𝐓𝐄𝐂𝐇 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-In%20Development-orange?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge&logo=react" />
