@@ -58,20 +58,57 @@ const Lobby = () => {
         {/* CENTER SECTION */}
         <div className="center">
           <div className="center-content">
-            <h1 className="mission-title">SELECT MISSION PROTOCOL</h1>
+            <h1 className="mission-title">DASHBOARD COMMAND</h1>
             
-            <div className="mission-grid">
-              <div className="mission-box">
-                <h2>BATTLE AI</h2>
-                <p>Train against advanced neural networks.</p>
+            <div className="dashboard-layout-split">
+              {/* LEFT: MISSION BOXES */}
+              <div className="mission-stack">
+                <div className="mission-box">
+                  <h2>BATTLE AI</h2>
+                  <p>Train against neural networks.</p>
+                </div>
+                <div className="mission-box">
+                  <h2>DUEL PLAYER</h2>
+                  <p>Ranked 1v1 combat.</p>
+                </div>
+                <div className="mission-box">
+                  <h2>SQUAD ARENA</h2>
+                  <p>Team-based tactical skirmish.</p>
+                </div>
               </div>
-              <div className="mission-box">
-                <h2>DUEL PLAYER</h2>
-                <p>Ranked 1v1 combat engagement.</p>
-              </div>
-              <div className="mission-box">
-                <h2>SQUAD ARENA</h2>
-                <p>Team-based tactical skirmish.</p>
+
+              {/* RIGHT: PLAYER PROFILE (RELOCATED) */}
+              <div className="profile-panel-side simple-card">
+                <div className="profile-header">
+                  <span className="username font-orbitron">{profile.username}</span>
+                  <span className="level text-secondary">Lv. {profile.level}</span>
+                </div>
+                
+                <div className="xp-container">
+                  <div className="xp-header">
+                    <span>PROGRESSION</span>
+                    <span>{profile.xp} / 100</span>
+                  </div>
+                  <div className="xp-track">
+                    <div className="xp-fill" style={{ width: `${profile.xp}%` }}></div>
+                  </div>
+                </div>
+
+                <div className="status-metrics">
+                   <div className="metric">
+                      <span className="m-label">CREDITS</span>
+                      <span className="m-value text-primary">{profile.coins} CR</span>
+                   </div>
+                   <div className="metric">
+                      <span className="m-label">STATUS</span>
+                      <span className="m-value text-neon">ACTIVE</span>
+                   </div>
+                </div>
+
+                <div className="profile-footer">
+                  <p>Neural Link: STABLE</p>
+                  <button className="reconnect-btn">RESET CORE</button>
+                </div>
               </div>
             </div>
           </div>
@@ -79,28 +116,6 @@ const Lobby = () => {
 
         {/* RIGHT SIDEBAR */}
         <div className="right">
-          {/* FUNCTIONAL PLAYER PROFILE */}
-          <div className="profile-card simple-card">
-            <div className="profile-header">
-               <span className="username font-orbitron">{profile.username}</span>
-               <span className="level text-secondary">Lv. {profile.level}</span>
-            </div>
-            
-            <div className="xp-container">
-               <div className="xp-header">
-                 <span>XP FEED</span>
-                 <span>{profile.xp} / 100</span>
-               </div>
-               <div className="xp-track">
-                  <div className="xp-fill" style={{ width: `${profile.xp}%` }}></div>
-               </div>
-            </div>
-
-            <div className="coins-display text-primary">
-               <span>CREDITS: {profile.coins} CR</span>
-            </div>
-          </div>
-
           <div className="simple-card">
             <h3>OPERATORS</h3>
             <p>No active units deployed.</p>
@@ -113,6 +128,7 @@ const Lobby = () => {
             </div>
           </div>
         </div>
+
 
       </div>
     </div>

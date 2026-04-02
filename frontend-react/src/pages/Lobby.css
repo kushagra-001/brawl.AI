@@ -92,129 +92,92 @@
 .simple-card p, .simple-card li { font-size: 0.85rem; color: #a5adcf; margin: 8px 0; }
 .simple-card ul { padding-left: 18px; }
 
-/* 👤 PLAYER PROFILE STYLES */
-.profile-card {
+/* 🎯 DASHBOARD (CENTER SPLIT) */
+.center-content { width: 100%; max-width: 1100px; text-align: left; }
+
+.dashboard-layout-split {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 30px;
+  width: 100%;
+  align-items: start;
+}
+
+.mission-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mission-stack .mission-box {
+  width: 100%;
+  text-align: left;
+  padding: 30px;
+  align-items: flex-start;
+}
+
+/* 👤 PROFILE SIDE PANEL */
+.profile-panel-side {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 30px;
+}
+
+.status-metrics {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  animation: fadeIn 0.8s ease-out;
+  background: rgba(0,0,0,0.2);
+  padding: 20px;
+  border-radius: 8px;
 }
 
-.profile-header {
+.metric {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 10px;
 }
 
-.profile-header .username {
-  font-weight: 900;
+.m-label { font-size: 0.65rem; font-weight: 800; color: #7a829e; letter-spacing: 1px; }
+.m-value { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 900; }
+
+.profile-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profile-footer p { font-size: 0.6rem; color: #555c7a; margin-bottom: 12px; }
+
+.reconnect-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid var(--primary);
   color: var(--primary);
-  letter-spacing: 2px;
-  font-size: 0.9rem;
-}
-
-.profile-header .level {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.7rem;
-  font-weight: 800;
-}
-
-.xp-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.xp-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.6rem;
-  font-weight: 800;
-  color: #7a829e;
-  letter-spacing: 1px;
-}
-
-.xp-track {
-  height: 6px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.xp-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  box-shadow: 0 0 10px var(--primary);
-  border-radius: 3px;
-  transition: width 1s ease-in-out;
-}
-
-.coins-display {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 800;
   letter-spacing: 2px;
-  margin-top: 5px;
-}
-
-/* 🎯 MISSION CONTENT (CENTER) */
-.center-content { width: 100%; max-width: 1000px; text-align: center; }
-
-.mission-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.8rem;
-  letter-spacing: 5px;
-  color: #fff;
-  margin-bottom: 50px;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(0, 240, 255, 0.1);
-  animation: titleFadeIn 1.2s ease-out;
-}
-
-@keyframes titleFadeIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-.mission-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; }
-
-.mission-box {
+  border-radius: 4px;
   cursor: pointer;
-  padding: 45px 25px;
-  display: flex; flex-direction: column; align-items: center;
-  border-color: rgba(162, 56, 255, 0.2);
+  transition: 0.3s;
 }
 
-/* ⚡ NEON HOVER EFFECTS ⚡ */
-.mission-box:hover {
-  transform: scale(1.04);
-  border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 240, 255, 0.15), inset 0 0 10px rgba(0, 240, 255, 0.05);
+.reconnect-btn:hover {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 0 20px var(--primary);
 }
 
-.mission-box h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1rem;
-  font-weight: 900;
-  color: #fff;
-  margin-bottom: 12px;
-  letter-spacing: 2px;
-  transition: color 0.3s;
-}
-
-.mission-box:hover h2 { color: var(--primary); text-shadow: 0 0 12px var(--primary); }
-
-.mission-box p { font-size: 0.8rem; color: #8a91b1; margin: 0; line-height: 1.5; }
-
-/* 💬 CHAT COMPONENT */
-.chat-section { flex-grow: 1; display: flex; flex-direction: column; }
-.chat-content { flex-grow: 1; background: rgba(0, 0, 0, 0.3); border-radius: 6px; padding: 12px; font-size: 0.8rem; color: #767d94; border: 1px solid rgba(255, 255, 255, 0.02); }
-
-/* 📱 MOBILE ADAPTATION */
-@media (max-width: 1150px) {
+/* 📱 MOBILE ADAPTATION (UPDATED) */
+@media (max-width: 1200px) {
   .container { grid-template-columns: 1fr; }
   .left, .right { display: none !important; }
-  .mission-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+  .dashboard-layout-split { grid-template-columns: 1fr; }
 }
+
 
 /* Universal scrollbars */
 ::-webkit-scrollbar { width: 5px; }
