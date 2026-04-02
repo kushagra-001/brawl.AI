@@ -4,6 +4,15 @@ import './Lobby.css';
 const Lobby = () => {
   return (
     <div className="lobby-wrapper">
+      {/* BACKGROUND PARTICLES LAYER (No impact on layout) */}
+      <div className="bg-particles">
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+      </div>
+
       <div className="container">
         
         {/* LEFT SIDEBAR */}

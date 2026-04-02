@@ -3,23 +3,26 @@
 :root {
   --primary: #00f0ff;
   --secondary: #a238ff;
-  --bg-dark-start: #080a18;
+  --neon-pink: #ff0055;
+  --bg-dark-start: #06030e;
+  --bg-dark-mid: #0b0c22;
   --bg-dark-end: #03040a;
-  --card-bg: rgba(20, 24, 40, 0.95);
-  --card-border: #1d2235;
 }
 
-/* 🌌 CLEAN REBUILT STRETCH 100vh GRID 🌌 */
+/* 🌌 NEON UPGRADED LOBBY STYLES (STABLE GRID PRESERVED) 🌌 */
 .lobby-wrapper {
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, var(--bg-dark-start) 0%, var(--bg-dark-end) 100%);
+  background: radial-gradient(circle at center, var(--bg-dark-mid) 0%, var(--bg-dark-start) 60%, var(--bg-dark-end) 100%);
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
   overflow: hidden;
   margin: 0;
   padding: 0;
+  animation: bgFadeIn 1s ease-out;
 }
+
+@keyframes bgFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .container {
   display: grid;
@@ -30,122 +33,124 @@
   padding: 0;
   overflow: hidden;
   box-sizing: border-box;
+  position: relative;
+  z-index: 10;
 }
 
-/* 👈 LEFT / 🎯 CENTER / 👉 RIGHT */
+/* 🔍 BACKGROUND PARTICLES (SUBTLE DYNAMIC EFFECT) 🔍 */
+.bg-particles { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.particle { position: absolute; width: 3px; height: 3px; background: #fff; border-radius: 50%; opacity: 0.15; animation: float 15s infinite linear; }
+.particle:nth-child(1) { top: 20%; left: 10%; animation-duration: 20s; }
+.particle:nth-child(2) { top: 80%; left: 15%; animation-duration: 25s; }
+.particle:nth-child(3) { top: 50%; left: 45%; animation-duration: 18s; }
+.particle:nth-child(4) { top: 30%; left: 80%; animation-duration: 22s; }
+.particle:nth-child(5) { top: 70%; left: 85%; animation-duration: 28s; }
+
+@keyframes float { 
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.2; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
+}
+
+/* 👈 LEFT / 🎯 CENTER / 👉 RIGHT (STRETCHED & STABLE) */
 .left, .center, .right {
   height: 100%;
   padding: 24px;
   box-sizing: border-box;
   display: flex !important;
   flex-direction: column !important;
-  gap: 16px !important;
+  gap: 20px !important;
   overflow-y: auto;
 }
 
-.left { grid-column: 1 / 2; border-right: 1px solid var(--card-border); }
+.left { grid-column: 1 / 2; border-right: 1px solid rgba(255, 255, 255, 0.03); }
 .center { grid-column: 2 / 3; justify-content: center !important; align-items: center !important; overflow: hidden; padding: 40px; }
-.right { grid-column: 3 / 4; border-left: 1px solid var(--card-border); }
+.right { grid-column: 3 / 4; border-left: 1px solid rgba(255, 255, 255, 0.03); }
 
-/* 🛡️ SIMPLE DESIGN ELEMENTS */
-.simple-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+/* 💎 GLASSMORPHISM CARDS 💎 */
+.simple-card, .mission-box {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 12px;
+  padding: 24px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease-out, border-color 0.3s;
 }
 
+/* Sidebar Specifics */
 .simple-card h3 {
   font-family: 'Orbitron', sans-serif;
   color: var(--primary);
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  margin-top: 0;
-  margin-bottom: 12px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+  margin-top: 0; margin-bottom: 15px;
 }
 
-.simple-card p, .simple-card li {
-  font-size: 0.85rem;
-  color: #b0b5cf;
-  margin: 6px 0;
-}
+.simple-card p, .simple-card li { font-size: 0.85rem; color: #a5adcf; margin: 8px 0; }
+.simple-card ul { padding-left: 18px; }
 
-.simple-card ul { padding-left: 20px; margin: 0; }
-
-.chat-section {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-content {
-  flex-grow: 1;
-  background: rgba(0,0,0,0.2);
-  border-radius: 4px;
-  padding: 10px;
-  font-size: 0.8rem;
-  color: #7a829e;
-}
-
-/* 🎯 MISSION PROTOCOL (CENTER) */
-.center-content {
-  width: 100%;
-  max-width: 900px;
-  text-align: center;
-}
+/* 🎯 MISSION CONTENT (CENTER) */
+.center-content { width: 100%; max-width: 1000px; text-align: center; }
 
 .mission-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.8rem;
-  letter-spacing: 4px;
+  letter-spacing: 5px;
   color: #fff;
-  margin-bottom: 40px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  margin-bottom: 50px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(0, 240, 255, 0.1);
+  animation: titleFadeIn 1.2s ease-out;
 }
 
-.mission-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  width: 100%;
-}
+@keyframes titleFadeIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.mission-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; }
 
 .mission-box {
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: 12px;
-  padding: 40px 20px;
   cursor: pointer;
-  transition: 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 45px 25px;
+  display: flex; flex-direction: column; align-items: center;
+  border-color: rgba(162, 56, 255, 0.2);
 }
 
+/* ⚡ NEON HOVER EFFECTS ⚡ */
 .mission-box:hover {
+  transform: scale(1.04);
   border-color: var(--primary);
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.1);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 240, 255, 0.15), inset 0 0 10px rgba(0, 240, 255, 0.05);
 }
 
 .mission-box h2 {
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  font-weight: 900;
   color: #fff;
   margin-bottom: 12px;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  transition: color 0.3s;
 }
 
-.mission-box p {
-  font-size: 0.8rem;
-  color: #8a91b1;
-  margin: 0;
-}
+.mission-box:hover h2 { color: var(--primary); text-shadow: 0 0 12px var(--primary); }
+
+.mission-box p { font-size: 0.8rem; color: #8a91b1; margin: 0; line-height: 1.5; }
+
+/* 💬 CHAT COMPONENT */
+.chat-section { flex-grow: 1; display: flex; flex-direction: column; }
+.chat-content { flex-grow: 1; background: rgba(0, 0, 0, 0.3); border-radius: 6px; padding: 12px; font-size: 0.8rem; color: #767d94; border: 1px solid rgba(255, 255, 255, 0.02); }
 
 /* 📱 MOBILE ADAPTATION */
-@media (max-width: 1100px) {
+@media (max-width: 1150px) {
   .container { grid-template-columns: 1fr; }
   .left, .right { display: none !important; }
-  .mission-grid { grid-template-columns: 1fr; }
+  .mission-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
 }
+
+/* Universal scrollbars */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
