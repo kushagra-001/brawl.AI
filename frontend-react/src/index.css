@@ -25,31 +25,21 @@
   box-sizing: border-box;
 }
 
-html, body {
+html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
   background-color: #06030e; /* DEEP BLACK STABILIZER */
-  color: var(--text-primary);
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #root {
-  min-height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+  display: block; /* Strict block for absolute-height children */
 }
 
-
-
-body {
-  font-family: 'Inter', sans-serif;
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-}
 
 h1, h2, h3, h4, .font-montserrat {
   font-family: 'Montserrat', sans-serif;
