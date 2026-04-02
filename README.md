@@ -2,6 +2,20 @@
 
 <p align="center">
   <b>Battle. Think. Dominate.</b><br>
+
+Title  
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-In%20Development-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge&logo=react" />
+  <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge&logo=node.js" />
+  <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge&logo=mongodb" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" />
+</p>
+
+Tagline  
+👉 Badges 🔥  
+Animation line  
+  
   🚀 AI-Powered Gaming Arena
 </p>
 
@@ -13,9 +27,22 @@
 
 ## 🎮 Overview
 
-> Brawl.AI is a futuristic AI-powered gaming platform where players compete in real-time battles using intelligence, strategy, and speed.
+Brawl.AI is a futuristic AI-powered gaming platform designed to create an immersive and competitive battle experience.
 
-💡 Designed with a modern neon gaming interface.
+### 💡 Key Highlights
+
+* 🤖 AI-powered gameplay with intelligent opponents
+* ⚔️ Multiple battle modes (AI, PvP, Multiplayer)
+* 🎯 Real-time interaction and fast-paced matches
+* 🎨 Modern neon-themed gaming interface
+* 🧠 Strategy-focused mechanics for skill-based competition
+* 🚀 Smooth animations and transitions for better UX
+* 📱 Responsive design for different screen sizes
+
+### 🎯 Goal
+
+To build a next-generation gaming platform where players compete using intelligence, strategy, and decision-making rather than just speed.
+
 
 ---
 
