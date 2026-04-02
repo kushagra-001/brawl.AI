@@ -215,7 +215,7 @@ const Lobby = () => {
       )}
 
       {/* Grid Layout */}
-      <div className="anime-grid-layout">
+      <div className="container">
         
         {/* Top Header */}
         <div className="grid-header-anime">
@@ -230,7 +230,7 @@ const Lobby = () => {
         </div>
 
         {/* Left Col: Telemetry & Bounty Boards */}
-        <div className="grid-left-col-anime">
+        <div className="left">
           <div className="sidebar-section-title font-orbitron text-primary text-xs tracking-widest mb-10">CORE TELEMETRY</div>
           <StatsDashboard stats={profile.stats} />
           <div className="sidebar-section-title font-orbitron text-secondary text-xs tracking-widest mt-20 mb-10">BOUNTY BOARD</div>
@@ -239,13 +239,15 @@ const Lobby = () => {
         </div>
 
         {/* Center Col: Game Mode Protocol */}
-        <div className="grid-center-col-anime">
-           {activeTab === 'home' && <ArenaCore isHovered={isCoreBoosted} />}
-           {renderCenterView()}
+        <div className="center">
+           <div className="center-content">
+             {activeTab === 'home' && <ArenaCore isHovered={isCoreBoosted} />}
+             {renderCenterView()}
+           </div>
         </div>
 
         {/* Right Col: Pilot Profile, Operators & Comms */}
-        <div className="grid-right-col-anime">
+        <div className="right">
           <PlayerProfilePanel playHover={playHover} playClick={playClick} />
           
           <div className="sidebar-section-title font-orbitron text-primary text-xs tracking-widest mt-10 mb-10">OPERATORS</div>

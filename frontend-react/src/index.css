@@ -29,8 +29,23 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
-  background-color: var(--bg-dark-900);
+  width: 100%;
+  background-color: #06030e; /* DEEP BLACK STABILIZER */
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+body {
   font-family: 'Inter', sans-serif;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -44,11 +59,11 @@ h1, h2, h3, h4, .font-montserrat {
   font-family: 'Orbitron', sans-serif;
 }
 
-/* Glassmorphism effects */
+/* Glassmorphism effects (REDUCED BLUR FOR PERFORMANCE) */
 .glass-panel {
   background: rgba(20, 23, 40, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--card-border);
   border-radius: 16px;
 }
