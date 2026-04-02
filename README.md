@@ -47,7 +47,7 @@ React • Node.js • MongoDB • JavaScript • HTML • CSS
 ## 📸 Preview
 
 <p align="center">
-  <img src="<img width="1919" height="1079" alt="Screenshot 2026-04-02 095722" src="https://github.com/user-attachments/assets/6ba5af2d-4a02-4b59-8fa1-4a2259a72ba9" />
+  <img src="<img width="1919" height="1079" alt="Screenshot 2026-04-02 095722" src="file:///C:/Users/Hp/OneDrive/Pictures/Screenshots%201/Screenshot%202026-04-02%20095722.png" />
 " width="600"/><br><br>
   <img src="<img width="1919" height="1079" alt="Screenshot 2026-04-02 095732" src="https://github.com/user-attachments/assets/e24ce5c6-632a-4f45-bc9a-0158f7ccb518" />
 " width="600"/>
