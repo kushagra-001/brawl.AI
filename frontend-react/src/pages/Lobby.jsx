@@ -10,6 +10,10 @@ const Lobby = () => {
     coins: 250
   });
 
+  // 🛡️ MODAL SYSTEM
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [statusMessage, setStatusMessage] = React.useState('');
+
   React.useEffect(() => {
     // 💾 Load from localStorage
     const saved = localStorage.getItem('brawl_profile');
@@ -26,8 +30,47 @@ const Lobby = () => {
     localStorage.setItem('brawl_profile', JSON.stringify(currentProfile));
   }, []);
 
+  const handleDifficultySelect = (diff) => {
+    setIsModalOpen(false);
+    setStatusMessage(`Initializing AI Battle [${diff.toUpperCase()}]...`);
+    setTimeout(() => setStatusMessage(''), 3000); // Clear after 3s
+  };
+
   return (
     <div className="lobby-wrapper">
+      {/* 🌑 MODAL OVERLAY (DIM BACKGROUND) */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="difficulty-modal glass-panel fadeInScale">
+            <h2 className="modal-title font-orbitron">SELECT AI DIFFICULTY</h2>
+            
+            <div className="difficulty-grid">
+              <div className="difficulty-card" onClick={() => handleDifficultySelect('Easy')}>
+                <span className="diff-label text-primary">BEGINNER AI</span>
+                <p className="diff-desc">Slow and predictable neural patterns.</p>
+              </div>
+              <div className="difficulty-card" onClick={() => handleDifficultySelect('Medium')}>
+                <span className="diff-label text-secondary">SMART AI</span>
+                <p className="diff-desc">Balanced tactical challenge.</p>
+              </div>
+              <div className="difficulty-card" onClick={() => handleDifficultySelect('Hard')}>
+                <span className="diff-label text-neon">AGGRESSIVE AI</span>
+                <p className="diff-desc">Competitive and hyper-fast response.</p>
+              </div>
+            </div>
+
+            <button className="cancel-btn font-orbitron" onClick={() => setIsModalOpen(false)}>ABORT MISSION</button>
+          </div>
+        </div>
+      )}
+
+      {/* 🚀 STATUS MESSAGE */}
+      {statusMessage && (
+        <div className="status-toast font-orbitron animate-slide-up">
+           {statusMessage}
+        </div>
+      )}
+
       {/* BACKGROUND PARTICLES LAYER */}
       <div className="bg-particles">
         <div className="particle"></div>
@@ -63,7 +106,7 @@ const Lobby = () => {
             <div className="dashboard-layout-split">
               {/* LEFT: MISSION BOXES */}
               <div className="mission-stack">
-                <div className="mission-box">
+                <div className="mission-box" onClick={() => setIsModalOpen(true)}>
                   <h2>BATTLE AI</h2>
                   <p>Train against neural networks.</p>
                 </div>

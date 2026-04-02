@@ -171,6 +171,82 @@
   box-shadow: 0 0 20px var(--primary);
 }
 
+/* 🌑 MODAL SYSTEM (ESTABLISHED) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.difficulty-modal {
+  width: 90%;
+  max-width: 500px;
+  padding: 40px;
+  text-align: center;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 50px rgba(0, 240, 255, 0.1);
+}
+
+.modal-title { margin-bottom: 30px; letter-spacing: 4px; font-size: 1.4rem; color: #fff; text-shadow: 0 0 15px var(--primary); }
+
+.difficulty-grid { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
+
+.difficulty-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: left;
+}
+
+.difficulty-card:hover { 
+  background: rgba(255,255,255,0.08); 
+  border-color: var(--primary); 
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+}
+
+.diff-label { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 0.85rem; letter-spacing: 2px; }
+.diff-desc { font-size: 0.75rem; color: #767d94; margin: 5px 0 0; }
+
+.cancel-btn {
+  background: none; border: 1px solid rgba(255,255,255,0.1); color: #555;
+  padding: 10px 20px; border-radius: 4px; cursor: pointer; transition: 0.3s; font-size: 0.65rem;
+}
+.cancel-btn:hover { color: var(--neon-pink); border-color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); }
+
+.fadeInScale { animation: fadeInScale 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+@keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+/* 🚀 STATUS TOAST */
+.status-toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-dark-mid);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 15px 30px;
+  border-radius: 4px;
+  z-index: 10000;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+}
+
+.animate-slide-up { animation: slideUp 0.3s ease-out; }
+@keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+
 /* 📱 MOBILE ADAPTATION (UPDATED) */
 @media (max-width: 1200px) {
   .container { grid-template-columns: 1fr; }
