@@ -10,12 +10,9 @@
   <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge&logo=mongodb" />
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" />
 </p>
-
-Tagline  
-👉 Badges 🔥  
-Animation line  
   
-  🚀 AI-Powered Gaming Arena
+  🚀 𝐀𝐈 𝐏𝐨𝐰𝐞𝐫𝐞𝐝 𝐆𝐚𝐦𝐢𝐧𝐠 𝐀𝐫𝐞𝐧𝐚
+
 </p>
 
 <p align="center">
