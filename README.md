@@ -2,10 +2,10 @@
 
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00F7FF,100:0A0F1C&height=200&section=header&text=Brawl.AI&fontSize=50&fontColor=ffffff&animation=fadeIn&fontAlignY=35" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00F7FF,100:0A0F1C&height=200&section=header&text=brawl.AI&fontSize=50&fontColor=ffffff&animation=fadeIn&fontAlignY=35" />
 </p>
 
-<h1 align="center">⚔️ Brawl.AI ⚔️</h1>
+<h1 align="center">⚔️ brawl.AI ⚔️</h1>
 
 <p align="center">
   <b>Battle. Think. Dominate.</b>
