@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Lobby from './pages/Lobby';
 import Battle from './pages/Battle';
 import Arena from './pages/Arena';
+import QuestionHub from './pages/QuestionHub';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -33,6 +34,11 @@ function App() {
           <Route path="/arena" element={
             <PrivateRoute>
               <Arena />
+            </PrivateRoute>
+          } />
+          <Route path="/question-hub" element={
+            <PrivateRoute>
+              <QuestionHub />
             </PrivateRoute>
           } />
           <Route path="*" element={<Navigate to="/" />} />

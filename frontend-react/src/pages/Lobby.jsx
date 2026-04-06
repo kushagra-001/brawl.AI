@@ -117,9 +117,9 @@ const Lobby = () => {
             <div className="dashboard-layout-split">
               {/* LEFT: MISSION BOXES */}
               <div className="mission-stack">
-                <div className="mission-box" onClick={() => setIsModalOpen(true)}>
+                <div className="mission-box" onClick={() => navigate('/question-hub')} id="battle-ai-btn">
                   <h2>BATTLE AI</h2>
-                  <p>Train against neural networks.</p>
+                  <p>Browse challenges &amp; enter combat.</p>
                 </div>
                 <div className="mission-box">
                   <h2>DUEL PLAYER</h2>

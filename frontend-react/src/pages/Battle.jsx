@@ -42,6 +42,9 @@ const Battle = () => {
   const pool         = QUESTIONS[difficulty] || QUESTIONS.Medium;
   const roundDuration = TIMER_DURATION[difficulty] || 45;
 
+  // If a question was pre-selected in the hub, use it as the first question
+  const preSelected = location.state?.selectedQuestion || null;
+
   // ── State ───────────────────────────────────────────────────
   const [round,         setRound]         = useState(1);
   const [timeLeft,      setTimeLeft]      = useState(roundDuration);
@@ -53,8 +56,8 @@ const Battle = () => {
   const [feedback,      setFeedback]      = useState(null);
   const [phase,         setPhase]         = useState('battle');
   const [battleResult,  setBattleResult]  = useState('');
-  const [usedIds,       setUsedIds]       = useState([]);
-  const [question,      setQuestion]      = useState(() => pickQuestion(pool, []));
+  const [usedIds,       setUsedIds]       = useState(() => preSelected ? [preSelected.id] : []);
+  const [question,      setQuestion]      = useState(() => preSelected || pickQuestion(pool, []));
   const [showHint,      setShowHint]      = useState(false);
   const [showEntrance,  setShowEntrance]  = useState(true);
   const [wrongAttempts, setWrongAttempts] = useState(0); // track misses per round
