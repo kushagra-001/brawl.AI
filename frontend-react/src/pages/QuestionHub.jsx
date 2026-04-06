@@ -14,10 +14,12 @@ const diffColor = { Easy: '#00ff73', Medium: '#a238ff', Hard: '#ff3c8d' };
 const diffBg    = { Easy: 'rgba(0,255,115,0.08)', Medium: 'rgba(162,56,255,0.08)', Hard: 'rgba(255,60,141,0.08)' };
 
 // ── Question Card ────────────────────────────────────────────
-const QCard = React.memo(({ q, selected, onClick }) => (
-  <button
-    className={`q-card ${selected ? 'q-card-active' : ''}`}
+const QCard = React.memo(({ q, isSelected, onClick }) => (
+  <div
+    className={`q-card ${isSelected ? 'q-card-active' : ''}`}
     onClick={() => onClick(q)}
+    role="button"
+    tabIndex={0}
     id={`q-${q.id}`}
   >
     <div className="qc-left">
@@ -37,63 +39,71 @@ const QCard = React.memo(({ q, selected, onClick }) => (
       </span>
       <span className="qc-xp font-orbitron">+{q.xp}xp</span>
     </div>
-  </button>
+  </div>
 ));
 
 // ── Preview Panel ────────────────────────────────────────────
 const PreviewPanel = ({ q, onStart, onRandom }) => {
-  if (!q) return (
-    <div className="preview-empty">
-      <Book size={40} className="pe-icon" />
-      <p className="font-orbitron">SELECT A QUESTION</p>
-      <span>Click any question from the list to preview it here.</span>
-      <button className="pr-random-btn font-orbitron" onClick={onRandom} id="random-btn">
-        <Shuffle size={15} /> RANDOM BATTLE
-      </button>
-    </div>
-  );
-
   return (
     <div className="preview-panel animate-fade-in">
-      <div className="pp-diff-banner" style={{ background: diffBg[q.difficulty], borderColor: diffColor[q.difficulty] }}>
-        <span className="pp-diff font-orbitron" style={{ color: diffColor[q.difficulty] }}>
-          {q.difficulty.toUpperCase()}
-        </span>
-        <span className="pp-cat font-orbitron">{q.category}</span>
-        <span className="pp-xp font-orbitron"><Zap size={11} /> {q.xp} XP</span>
-      </div>
-
-      <h2 className="pp-title font-orbitron">{q.title}</h2>
-
-      <p className="pp-desc">{q.description.replace(/\[\[|\]\]/g, '')}</p>
-
-      <div className="pp-example">
-        <div className="pp-ex-row">
-          <span className="pp-ex-label font-orbitron">INPUT</span>
-          <span className="pp-ex-val font-orbitron">{q.example.input}</span>
+      {!q ? (
+        <div className="preview-empty">
+          <Book size={40} className="pe-icon" />
+          <p className="font-orbitron">SELECT A QUESTION</p>
+          <span>Click any question from the list to view details.</span>
         </div>
-        <div className="pp-ex-div"></div>
-        <div className="pp-ex-row">
-          <span className="pp-ex-label font-orbitron">OUTPUT</span>
-          <span className="pp-ex-val font-orbitron" style={{ color: '#00ff73' }}>{q.example.output}</span>
-        </div>
+      ) : (
+        <>
+          <div className="pp-diff-banner" style={{ background: diffBg[q.difficulty], borderColor: diffColor[q.difficulty] }}>
+            <span className="pp-diff font-orbitron" style={{ color: diffColor[q.difficulty] }}>
+              {q.difficulty.toUpperCase()}
+            </span>
+            <span className="pp-cat font-orbitron">{q.category}</span>
+            <span className="pp-xp font-orbitron"><Zap size={11} /> {q.xp} XP</span>
+          </div>
+
+          <h2 className="pp-title font-orbitron">{q.title}</h2>
+
+          <p className="pp-desc">{q.description.replace(/\[\[|\]\]/g, '')}</p>
+
+          <div className="pp-example">
+            <div className="pp-ex-row">
+              <span className="pp-ex-label font-orbitron">INPUT</span>
+              <span className="pp-ex-val font-orbitron">{q.example.input}</span>
+            </div>
+            <div className="pp-ex-div"></div>
+            <div className="pp-ex-row">
+              <span className="pp-ex-label font-orbitron">OUTPUT</span>
+              <span className="pp-ex-val font-orbitron" style={{ color: '#00ff73' }}>{q.example.output}</span>
+            </div>
+          </div>
+
+          <div className="pp-tags">
+            {q.tags.map(t => (
+              <span key={t} className="pp-tag font-orbitron"><Tag size={9} />{t}</span>
+            ))}
+          </div>
+
+          <div className="pp-hint font-orbitron">💡 {q.hint}</div>
+        </>
+      )}
+
+      <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {!q && (
+          <button className="pr-random-btn font-orbitron" onClick={onRandom} id="random-btn">
+            <Shuffle size={15} /> RANDOM BATTLE
+          </button>
+        )}
+        <button
+          className="start-battle-btn font-orbitron"
+          disabled={!q}
+          onClick={() => q && onStart(q)}
+          id="start-battle-btn"
+          style={{ opacity: q ? 1 : 0.4, cursor: q ? 'pointer' : 'not-allowed' }}
+        >
+          <Zap size={18} /> START BATTLE ⚡
+        </button>
       </div>
-
-      <div className="pp-tags">
-        {q.tags.map(t => (
-          <span key={t} className="pp-tag font-orbitron"><Tag size={9} />{t}</span>
-        ))}
-      </div>
-
-      <div className="pp-hint font-orbitron">💡 {q.hint}</div>
-
-      <button
-        className="start-battle-btn font-orbitron"
-        onClick={() => onStart(q)}
-        id="start-battle-btn"
-      >
-        <Zap size={18} /> START BATTLE ⚡
-      </button>
     </div>
   );
 };
@@ -132,7 +142,7 @@ const QuestionHub = () => {
   const [category,    setCategory]    = useState('All');
   const [search,      setSearch]      = useState('');
   const [page,        setPage]        = useState(1);
-  const [selected,    setSelected]    = useState(null);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   // ── Filter + Search ─────────────────────────────────────
   const filtered = useMemo(() => {
@@ -151,10 +161,12 @@ const QuestionHub = () => {
   const updateFilter = useCallback((setter) => (val) => {
     setter(val);
     setPage(1);
-    setSelected(null);
+    setSelectedQuestion(null);
   }, []);
 
-  const handleSelect = useCallback((q) => setSelected(q), []);
+  const handleSelect = useCallback((q) => {
+    setSelectedQuestion(q);
+  }, []);
 
   const handleStart = useCallback((q) => {
     navigate('/battle', {
@@ -220,7 +232,7 @@ const QuestionHub = () => {
             type="text"
             placeholder="SEARCH QUESTIONS..."
             value={search}
-            onChange={e => { setSearch(e.target.value); setPage(1); setSelected(null); }}
+            onChange={e => { setSearch(e.target.value); setPage(1); setSelectedQuestion(null); }}
           />
         </div>
         <div className="hub-result-count font-orbitron">
@@ -288,7 +300,7 @@ const QuestionHub = () => {
                 <QCard
                   key={q.id}
                   q={q}
-                  selected={selected?.id === q.id}
+                  isSelected={selectedQuestion?.id === q.id}
                   onClick={handleSelect}
                 />
               ))
@@ -296,13 +308,13 @@ const QuestionHub = () => {
           </div>
 
           {totalPages > 1 && (
-            <Pagination page={page} totalPages={totalPages} onChange={p => { setPage(p); setSelected(null); }} />
+            <Pagination page={page} totalPages={totalPages} onChange={p => { setPage(p); setSelectedQuestion(null); }} />
           )}
         </main>
 
         {/* ── RIGHT: PREVIEW ── */}
         <aside className="hub-preview">
-          <PreviewPanel q={selected} onStart={handleStart} onRandom={handleRandom} />
+          <PreviewPanel q={selectedQuestion} onStart={handleStart} onRandom={handleRandom} />
         </aside>
 
       </div>
