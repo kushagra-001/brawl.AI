@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Lobby.css';
-import { X } from 'lucide-react';
+import { X, Maximize, Minimize } from 'lucide-react';
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -16,6 +16,37 @@ const Lobby = () => {
   // 🛡️ MODAL SYSTEM
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [statusMessage, setStatusMessage] = React.useState('');
+
+  // 📺 FULLSCREEN SYSTEM
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => console.error(err));
+    } else {
+      document.exitFullscreen().catch(err => console.error(err));
+    }
+  };
+
+  React.useEffect(() => {
+    const handleKeydown = (e) => {
+      if (e.key.toLowerCase() === 'f') {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          toggleFullscreen();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
+  }, []);
 
   React.useEffect(() => {
     // 💾 Load from localStorage
@@ -90,6 +121,16 @@ const Lobby = () => {
         <div className="particle"></div>
         <div className="particle"></div>
       </div>
+
+      {/* 📺 FULLSCREEN TOGGLE */}
+      <button 
+        className="fullscreen-toggle" 
+        onClick={toggleFullscreen} 
+        title="Toggle Fullscreen (F)"
+        id="fullscreen-toggle-btn"
+      >
+        {isFullscreen ? <X size={18} /> : <Maximize size={18} />}
+      </button>
 
       <div className="container">
         
