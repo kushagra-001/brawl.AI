@@ -283,12 +283,12 @@ const Battle = () => {
             {question?.example && (
               <div className="example-box">
                 <div className="example-row">
-                  <span className="ex-label font-orbitron">INPUT</span>
+                  <span className="ex-label font-orbitron">INPUT FORMAT</span>
                   <span className="ex-value font-orbitron">{question.example.input || ''}</span>
                 </div>
                 <div className="example-divider"></div>
                 <div className="example-row">
-                  <span className="ex-label font-orbitron">OUTPUT</span>
+                  <span className="ex-label font-orbitron">EXPECTED OUTPUT</span>
                   <span className="ex-value font-orbitron output-val">{question.example.output || ''}</span>
                 </div>
               </div>
@@ -305,27 +305,55 @@ const Battle = () => {
           )}
         </div>
 
-        {/* ── INPUT + BUTTONS (battle phase) ── */}
+        {/* ── CODE EDITOR (REPLACES SIMPLE INPUT) ── */}
         {phase === 'battle' && (
-          <div className="battle-action-zone">
-            <div className="input-wrapper">
-              <input
-                ref={inputRef}
-                type="text"
-                value={userInput}
-                onChange={e => setUserInput(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleAttack()}
-                placeholder="TYPE YOUR ANSWER..."
-                className="cyber-input font-orbitron"
-                disabled={isAttacking}
-                autoComplete="off"
-                spellCheck={false}
-                id="answer-input"
-              />
-              <div className="input-border-glow"></div>
+          <div className="battle-action-zone code-mode">
+            <div className="code-editor-wrapper">
+              <div className="editor-header font-orbitron">
+                <div className="editor-tab active">solution.code</div>
+                <select className="lang-dropdown font-orbitron" defaultValue="javascript">
+                  <option value="javascript">JavaScript</option>
+                  <option value="python">Python</option>
+                  <option value="java">Java</option>
+                  <option value="cpp">C++</option>
+                </select>
+              </div>
+              <div className="editor-body">
+                <div className="editor-lines">
+                  {Array.from({ length: Math.max(6, (userInput.match(/\n/g) || []).length + 1) }).map((_, i) => (
+                    <div key={i} className="line-num font-orbitron">{i + 1}</div>
+                  ))}
+                </div>
+                <textarea
+                  ref={inputRef}
+                  value={userInput}
+                  onChange={e => setUserInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Tab') {
+                      e.preventDefault();
+                      const target = e.target;
+                      const { selectionStart, selectionEnd } = target;
+                      setUserInput(userInput.substring(0, selectionStart) + '  ' + userInput.substring(selectionEnd));
+                      setTimeout(() => { target.selectionStart = target.selectionEnd = selectionStart + 2; }, 0);
+                    }
+                  }}
+                  className="code-textarea"
+                  placeholder="// Implement your solution here..."
+                  disabled={isAttacking}
+                  spellCheck={false}
+                />
+              </div>
             </div>
 
-            <div className="action-buttons">
+            <div className="action-buttons code-actions">
+              <button 
+                className="reset-btn font-orbitron" 
+                onClick={() => setUserInput('')}
+                disabled={isAttacking}
+              >
+                <RefreshCw size={15} /> RESET CODE
+              </button>
+
               <button
                 className={`attack-btn font-orbitron ${isAttacking ? 'btn-loading' : ''}`}
                 onClick={handleAttack}
@@ -333,8 +361,8 @@ const Battle = () => {
                 id="submit-attack-btn"
               >
                 {isAttacking
-                  ? <><Zap size={20} className="spin-icon" /> CALCULATING...</>
-                  : <><Swords size={20} /> SUBMIT ATTACK ⚡</>
+                  ? <><Zap size={18} className="spin-icon" /> COMPILING...</>
+                  : <><Terminal size={18} /> RUN CODE & ATTACK ⚡</>
                 }
               </button>
 
@@ -366,7 +394,7 @@ const Battle = () => {
 
             {/* Label */}
             <div className={`result-label font-orbitron ${feedback.type}`}>
-              {feedback.type === 'hit' ? 'HIT!' : feedback.type === 'miss' ? 'MISS!' : 'TIMEOUT!'}
+              {feedback.type === 'hit' ? 'Hit! +XP ⚡' : feedback.type === 'miss' ? 'Compilation Failed ❌' : 'Timeout Failed ❌'}
             </div>
 
             {/* XP / message */}
