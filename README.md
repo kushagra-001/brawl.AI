@@ -53,8 +53,6 @@ To build a next-generation gaming platform where players compete using intellige
 
 ---
 
----
-
 ## 📌 Table of Contents
 
 * [🧠 About the Project](#-about-the-project)
@@ -210,8 +208,6 @@ User Enters Arena
 
 ---
 
----
-
 ## 🛠️ Tech Stack
 
 <p align="left">
@@ -235,7 +231,6 @@ User Enters Arena
 | 🗄️ Database  | MongoDB · Mongoose               |
 | 🛠️ Dev Tools | Postman · VS Code · Git · GitHub |
 
----
 ---
 
 ## 🧠 Score Calculation System
@@ -266,7 +261,6 @@ Base Score: 50  (neutral starting point)
 * AI difficulty influences score variation
 * Final score determines match outcome and ranking
 
----
 ---
 
 ## 📡 API Endpoints
@@ -348,8 +342,6 @@ Fetch final result of a match.
 }
 ```
 
----
-
 ### 📊 Get Match History
 
 `GET /api/history`
@@ -366,9 +358,6 @@ Fetch recent matches from database.
 }
 ```
 
----
----
-
 ## 🗂️ Implementation Plan
 
 ```id="planblock"
@@ -382,7 +371,6 @@ Phase 7  █████░░░░░  Testing & Performance Optimization     
 Phase 8  ░░░░░░░░░░  Deployment & Final Touches                   ⏳ Pending  
 ```
 
----
 ---
 
 ## 👥 Team
